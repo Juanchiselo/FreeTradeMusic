@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane id="loginBorderPane" fx:id="borderPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" styleClass="background" stylesheets="@../styles/DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FreeTradeMusic.Controller">
+   <left>
+        <GridPane prefHeight="579.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1233.0" minWidth="10.0" percentWidth="100.0" prefWidth="1100.0" />
+            </columnConstraints>
+            <rowConstraints>
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="40.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="2.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="10.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="10.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="320.6666564941406" minHeight="0.0" percentHeight="10.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="15.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="10.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="5.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label id="titleLabel" alignment="CENTER" prefHeight="151.0" prefWidth="309.0" styleClass="title" stylesheets="@../styles/DarkTheme.css" text="Free Trade Music" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.rowIndex="1" />
+                  <TextField fx:id="usernameTextField" alignment="CENTER" onAction="#onLogin" prefHeight="37.0" prefWidth="278.0" promptText="Username" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets left="100.0" right="100.0" />
+               </GridPane.margin>
+            </TextField>
+            <PasswordField fx:id="passwordPasswordField" alignment="CENTER" onAction="#onLogin" promptText="Password" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="100.0" right="100.0" />
+               </GridPane.margin>
+            </PasswordField>
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onLogin" style="-fx-font-size: 18;" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <GridPane GridPane.rowIndex="6">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label fx:id="createAccountLabel" onMouseClicked="#onCreateAccount" styleClass="labelButton" text="Create Account" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Label fx:id="forgotPasswordLabel" onMouseClicked="#onForgotPassword" styleClass="labelButton" text="Forgot Password?" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+               </children>
+            </GridPane>
+            </children>
+        </GridPane>
+   </left>
+</BorderPane>
