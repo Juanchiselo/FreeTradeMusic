@@ -28,7 +28,6 @@ public class DatabaseManager
     public boolean login(String username, String password)
     {
         // TODO - Rob: Insert database call for user authentication here.
-        System.out.println("Testing out the database.");
         try{
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
