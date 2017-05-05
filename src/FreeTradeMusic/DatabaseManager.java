@@ -27,7 +27,6 @@ public class DatabaseManager
 
     public boolean login(String username, String password)
     {
-        // TODO - Rob: Insert database call for user authentication here.
         try{
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
@@ -41,12 +40,5 @@ public class DatabaseManager
              else{stmt.close();conn.close();return true;}
         }catch(SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e){System.out.println("Dead");}
         return false;
-        /*
-        if(username.equalsIgnoreCase("user")
-                && password.equals("1A1DC91C907325C69271DDF0C944BC72"))
-            return true;
-
-        return false;
-        */
     }
 }

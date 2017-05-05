@@ -33,20 +33,16 @@ public class Controller
     public void onLogin()
     {
         String username = usernameTextField.getText().trim();
-        String password = hashPassword(passwordPasswordField.getText().trim());
-        ObservableList<String> usernameTextFieldStyle = usernameTextField.getStyleClass();
-        //ObservableList<String> passwordPasswordField = passwordPasswordField.getStyleClass();
+        String password = passwordPasswordField.getText().trim();
 
         if(!username.isEmpty() && !password.isEmpty())
         {
-            System.out.println("Username: " + username
-                    + "\nPassword: " + password);
+            password = hashPassword(password);
 
             if(DatabaseManager.getInstance().login(username, password))
             {
                 FreeTradeMusic.stage.setScene(FreeTradeMusic.mainWindow);
                 FreeTradeMusic.stage.setResizable(true);
-                usernameTextFieldStyle.removeAll(Collections.singleton("error"));
             }
             else
                 displayError("Wrong Username/Password",
@@ -54,15 +50,8 @@ public class Controller
         }
         else
         {
-            if(!username.isEmpty())
-            {
-//                if (!usernameTextFieldStyle.contains(".error")) {
-//                    usernameTextFieldStyle.add(".error");
-//                }
-            }
-
-            displayError("Empty field",
-                    "One of the fields is empty.");
+            displayError("Empty Field",
+                    "One or both fields are empty.");
         }
     }
 
