@@ -1,8 +1,18 @@
 package FreeTradeMusic;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
 public class DatabaseManager
 {
     private static DatabaseManager instance = null;
+    private static String dbURL = "jdbc:mysql://ftm.ctcgotdan5u6.us-west-2.rds.amazonaws.com:3306/";
+    private static String dbName = "FreeTradeMusicDB";
+    private static String dbUser = "cs480";
+    private static String dbPW = "cs480ftm";
 
     protected DatabaseManager()
     {
@@ -18,11 +28,26 @@ public class DatabaseManager
     public boolean login(String username, String password)
     {
         // TODO - Rob: Insert database call for user authentication here.
-
+        System.out.println("Testing out the database.");
+        try{
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
+            Statement stmt = conn.createStatement();
+            String varSQL = "SELECT * "
+                    + "FROM Users "
+                    + "WHERE User = " + "'" + username + "'"
+                    + " AND Password = " + "'" + password + "'";
+             ResultSet result = stmt.executeQuery(varSQL);
+             if(!result.absolute(1)){stmt.close();conn.close();return false;}
+             else{stmt.close();conn.close();return true;}
+        }catch(SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e){System.out.println("Dead");}
+        return false;
+        /*
         if(username.equalsIgnoreCase("user")
                 && password.equals("1A1DC91C907325C69271DDF0C944BC72"))
             return true;
 
         return false;
+        */
     }
 }
