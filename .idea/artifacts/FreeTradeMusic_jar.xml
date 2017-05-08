@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FreeTradeMusic:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FreeTradeMusic</output-path>
+    <root id="archive" name="FreeTradeMusic.jar">
+      <element id="module-output" name="FreeTradeMusic" />
+    </root>
+  </artifact>
+</component>

@@ -1,13 +1,13 @@
 .background {
     /*-fx-background-color: #1d1d1d;*/
-    -fx-background-image:url("../drawables/DarkBackground.jpg");
+    -fx-background-image:url("../drawables/ConcertBackground01Blur.jpg");
     -fx-background-size: cover;
 }
 
 #loginBorderPane .title {
     -fx-font-size: 45;
     -fx-opacity: 1;
-    -fx-color: white;
+    -fx-text-fill: black;
 }
 
 .labelButton:hover {

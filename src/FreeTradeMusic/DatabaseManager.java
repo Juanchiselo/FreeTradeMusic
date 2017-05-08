@@ -41,4 +41,18 @@ public class DatabaseManager
         }catch(SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e){System.out.println("Dead");}
         return false;
     }
+
+    public boolean register(String username, String password, String email)
+    {
+        System.out.println("Username: " + username
+                    + "\nPassword: " + password
+                    + "\nEmail: " + email);
+        // TODO - Rob: Return whether the record was created successfully.
+        return true;
+    }
+
+    public boolean isUsernameAvailable(String username)
+    {
+        return true;
+    }
 }
