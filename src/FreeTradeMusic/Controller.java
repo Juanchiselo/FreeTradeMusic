@@ -2,6 +2,7 @@ package FreeTradeMusic;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.math.BigInteger;
@@ -18,22 +19,61 @@ public class Controller
     @FXML private PasswordField confirmPasswordCAPasswordField;
     @FXML private TextField emailCATextField;
 
-
-    public void onCreateAccount()
+    /**
+     * Switches the scenes based on the given sceneName.
+     * @param sceneName - The name of the scene to switch to.
+     */
+    private void switchScene(String sceneName)
     {
-        FreeTradeMusic.stage.setScene(FreeTradeMusic.createAccountScene);
-        FreeTradeMusic.stage.setResizable(false);
+        Scene scene = null;
+        boolean resizable = false;
+
+        switch (sceneName)
+        {
+            case "LOGIN":
+                usernameCATextField.clear();
+                passwordCAPasswordField.clear();
+                confirmPasswordCAPasswordField.clear();
+                emailCATextField.clear();
+                scene = FreeTradeMusic.loginScene;
+                resizable = false;
+                break;
+            case "REGISTER":
+                usernameTextField.clear();
+                passwordPasswordField.clear();
+                scene = FreeTradeMusic.createAccountScene;
+                resizable = false;
+                break;
+            case "MAIN_WINDOW":
+                usernameTextField.clear();
+                passwordPasswordField.clear();
+                scene = FreeTradeMusic.mainWindow;
+                resizable = true;
+                break;
+        }
+
+        FreeTradeMusic.stage.setScene(scene);
+        FreeTradeMusic.stage.setResizable(resizable);
     }
 
+    /**
+     * Event handler for the Register button.
+     */
+    public void onCreateAccount()
+    {
+        switchScene("REGISTER");
+    }
+
+    /**
+     * Event handler for the Forgot Password? button.
+     */
     public void onForgotPassword()
     {
-        FreeTradeMusic.stage.setScene(FreeTradeMusic.mainWindow);
-        FreeTradeMusic.stage.setResizable(true);
         System.out.println("Forgot password clicked.");
     }
 
     /**
-     * The event handler for the login.
+     * The event handler for the Login button.
      */
     public void onLogin()
     {
@@ -45,10 +85,7 @@ public class Controller
             password = hashPassword(password);
 
             if(DatabaseManager.getInstance().login(username, password))
-            {
-                FreeTradeMusic.stage.setScene(FreeTradeMusic.mainWindow);
-                FreeTradeMusic.stage.setResizable(true);
-            }
+                switchScene("MAIN_WINDOW");
             else
                 displayError("Wrong Username/Password",
                         "You entered a wrong username or password.");
@@ -59,6 +96,9 @@ public class Controller
                     "One or both fields are empty.");
     }
 
+    /**
+     * The event handler for the Register button in the Register scene.
+     */
     public void onRegister()
     {
         String username = usernameCATextField.getText().trim();
@@ -71,8 +111,7 @@ public class Controller
                 && !confirmPassword.isEmpty()
                 && !email.isEmpty())
         {
-            if(isInputValid(username, "USERNAME")
-                    && DatabaseManager.getInstance().isUsernameAvailable(username))
+            if(DatabaseManager.getInstance().isUsernameAvailable(username))
             {
                 if(password.equals(confirmPassword))
                 {
@@ -84,8 +123,7 @@ public class Controller
 
                         if(DatabaseManager.getInstance().register(username, password, email))
                         {
-                            FreeTradeMusic.stage.setScene(FreeTradeMusic.loginScene);
-                            FreeTradeMusic.stage.setResizable(false);
+                            switchScene("LOGIN");
                             // TODO: Let the user know his account was created.
                         }
                         else
@@ -116,10 +154,13 @@ public class Controller
                     "One or more fields are empty.");
     }
 
+    /**
+     * Event handler for Cancel button in the
+     * register window.
+     */
     public void onCancelRegister()
     {
-        FreeTradeMusic.stage.setScene(FreeTradeMusic.loginScene);
-        FreeTradeMusic.stage.setResizable(false);
+        switchScene("LOGIN");
     }
 
     /**
@@ -172,27 +213,16 @@ public class Controller
         switch (type.toUpperCase())
         {
             case "USERNAME":
-                regex = "^[a-z]+$";
+                regex = "^[a-zA-Z0-9]+$";
                 break;
             case "PASSWORD":
-                regex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+                regex = "^.{8,}$";
                 break;
             case "EMAIL":
-                regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+                regex = "^[a-zA-Z0-9._]+@[a-zA-Z0-9]+\\.[a-zA-Z]{2,6}$";
                 break;
-                /*
-                    ^                 # start-of-string
-                    (?=.*[0-9])       # a digit must occur at least once
-                    (?=.*[a-z])       # a lower case letter must occur at least once
-                    (?=.*[A-Z])       # an upper case letter must occur at least once
-                    (?=.*[@#$%^&+=])  # a special character must occur at least once
-                    (?=\S+$)          # no whitespace allowed in the entire string
-                    .{8,}             # anything, at least eight places though
-                    $                 # end-of-string
-                 */
         }
 
-        //return input.matches(regex);
-        return true;
+        return input.matches(regex);
     }
 }
