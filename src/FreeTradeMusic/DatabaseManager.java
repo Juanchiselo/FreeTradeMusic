@@ -13,81 +13,56 @@ public class DatabaseManager
     private static String dbName = "FreeTradeMusicDB";
     private static String dbUser = "cs480";
     private static String dbPW = "cs480ftm";
+    private static Statement stmt;
+    private static Connection conn;
 
     protected DatabaseManager()
     {
         // Exists only to defeat instantiation.
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            conn = DriverManager.getConnection(dbURL + dbName, dbUser, dbPW);
+            stmt = conn.createStatement();
+        }catch(SQLException |
+                IllegalAccessException |
+                ClassNotFoundException |
+                InstantiationException e){System.out.println("Dead");}
     }
-    public static DatabaseManager getInstance()
+    public static DatabaseManager getInstance() throws SQLException
     {
         if(instance == null)
             instance = new DatabaseManager();
         return instance;
     }
 
-    private ResultSet queryDatabase(String query)
-    {
-        ResultSet result = null;
+    private ResultSet queryDatabase(String query) throws SQLException {return stmt.executeQuery(query);}
 
-        return result;
+    public boolean login(String username, String password) throws SQLException
+    {
+        String varSQL = "SELECT * "
+                + "FROM Users "
+                + "WHERE User = " + "'" + username + "'"
+                + " AND Password = " + "'" + password + "'";
+       queryDatabase(varSQL);
+       if(!queryDatabase(varSQL).absolute(1)){return false;}
+       else{return true;}
     }
 
-    public boolean login(String username, String password)
+    public boolean register(String username, String password, String email) throws SQLException
     {
-        try{
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
-            Statement stmt = conn.createStatement();
-            String varSQL = "SELECT * "
-                    + "FROM Users "
-                    + "WHERE User = " + "'" + username + "'"
-                    + " AND Password = " + "'" + password + "'";
-             ResultSet result = stmt.executeQuery(varSQL);
-             if(!result.absolute(1)){stmt.close();conn.close();return false;}
-             else{stmt.close();conn.close();return true;}
-        }catch(SQLException | IllegalAccessException | ClassNotFoundException | InstantiationException e){System.out.println("Dead");}
-        return false;
+        String varSQL = "INSERT INTO Users (User,Password,Email)" +
+                "Values('" + username.toLowerCase() + "'," + "'" + password +
+                "'," + "'" + email.toLowerCase() + "'" + ")";
+        if(stmt.executeUpdate(varSQL)==0) return false;
+        return true;
     }
 
-    public boolean register(String username, String password, String email)
+    public boolean isUsernameAvailable(String username) throws SQLException
     {
-        try{
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
-            Statement stmt = conn.createStatement();
-            String varSQL = "INSERT INTO Users (User,Password,Email)" +
-                            "Values('" + username + "'," + "'" + password +
-                            "'," + "'" + email + "'" + ")";
-            int res = stmt.executeUpdate(varSQL);
-            if(res==0) return false;
+        String varSQL = "SELECT * "
+                + "FROM Users "
+                + "WHERE User = " + "'" + username.toLowerCase() + "'";
+            if (queryDatabase(varSQL).absolute(1)) return false;
             return true;
-        }catch(SQLException |
-                IllegalAccessException |
-                ClassNotFoundException |
-                InstantiationException e){System.out.println("Dead");}
-        return false;
-    }
-
-    public boolean isUsernameAvailable(String username)
-    {
-        try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            Connection conn = DriverManager.getConnection(dbURL + dbName, dbUser, dbPW);
-            Statement stmt = conn.createStatement();
-            String varSQL = "SELECT * "
-                    + "FROM Users "
-                    + "WHERE User = " + "'" + username.toLowerCase() + "'";
-            ResultSet result = stmt.executeQuery(varSQL);
-            if (stmt.executeQuery(varSQL).absolute(1)) {
-                stmt.close();
-                conn.close();
-                return false;
-            }
-            return true;
-        }catch(SQLException |
-                IllegalAccessException |
-                ClassNotFoundException |
-                InstantiationException e){System.out.println("Dead");}
-        return false;
     }
 }
