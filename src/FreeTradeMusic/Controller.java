@@ -1,13 +1,11 @@
 package FreeTradeMusic;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.math.BigInteger;
 import java.security.*;
-import java.util.Collections;
 
 
 public class Controller
@@ -87,13 +85,15 @@ public class Controller
             if(DatabaseManager.getInstance().login(username, password))
                 switchScene("MAIN_WINDOW");
             else
-                displayError("Wrong Username/Password",
-                        "You entered a wrong username or password.");
+                alertUser("Wrong Username/Password",
+                        "You entered a wrong username or password.",
+                        "ERROR");
                 // TODO: Put red borders on invalid fields.
         }
         else
-            displayError("Empty Field",
-                    "One or both fields are empty.");
+            alertUser("Empty Field",
+                    "One or both fields are empty.",
+                    "ERROR");
     }
 
     /**
@@ -123,35 +123,41 @@ public class Controller
 
                         if(DatabaseManager.getInstance().register(username, password, email))
                         {
+                            alertUser("Account Created Successfully",
+                                    "Your account was created successfully.",
+                                    "INFORMATION");
                             switchScene("LOGIN");
-                            // TODO: Let the user know his account was created.
                         }
                         else
                         {
-                            displayError("Account Could Not Be Created",
-                                    "Your account could not be created.");
+                            alertUser("Account Could Not Be Created",
+                                    "Your account could not be created.",
+                                    "ERROR");
                             // TODO: Let the user know why.
                         }
                     }
                     else
                     {
-                        displayError("Invalid Field",
-                                "One of your inputs is invalid.");
+                        alertUser("Invalid Field",
+                                "One of your inputs is invalid.",
+                                "ERROR");
                         // TODO: Put red borders on invalid fields.
                     }
                 }
                 else
-                    displayError("Passwords Do Not Match",
-                            "Your passwords do not match. Please try again.");
+                    alertUser("Passwords Do Not Match",
+                            "Your passwords do not match. Please try again.",
+                            "ERROR");
             }
             else
-                displayError("Username Not Available",
+                alertUser("Username Not Available",
                         "The username you entered is not available. "
-                        + "Please try another one.");
+                        + "Please try another one.", "ERROR");
         }
         else
-            displayError("Empty Field",
-                    "One or more fields are empty.");
+            alertUser("Empty Field",
+                    "One or more fields are empty.",
+                    "ERROR");
     }
 
     /**
@@ -191,9 +197,22 @@ public class Controller
      * @param title - The title of the alert.
      * @param errorMessage - The error message.
      */
-    public void displayError(String title, String errorMessage)
+    private void alertUser(String title, String errorMessage, String type)
     {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.NONE);
+
+        switch (type)
+        {
+            case "INFORMATION":
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                break;
+            case "ERROR":
+                alert = new Alert(Alert.AlertType.ERROR);
+                break;
+            case "CONFIRMATION":
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+        }
+
         alert.setTitle(title);
         alert.setHeaderText(title);
         alert.setContentText(errorMessage);

@@ -25,6 +25,13 @@ public class DatabaseManager
         return instance;
     }
 
+    private ResultSet queryDatabase(String query)
+    {
+        ResultSet result = null;
+
+        return result;
+    }
+
     public boolean login(String username, String password)
     {
         try{
@@ -44,11 +51,6 @@ public class DatabaseManager
 
     public boolean register(String username, String password, String email)
     {
-        System.out.println("Username: " + username
-                    + "\nPassword: " + password
-                    + "\nEmail: " + email);
-        // TODO - Rob: Return whether the record was created successfully.
-        if(password.length() < 8 || username.contains(" "))return false;
         try{
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
@@ -66,7 +68,7 @@ public class DatabaseManager
         return false;
     }
 
-    public boolean isUsernameAvailable(String username, String email)
+    public boolean isUsernameAvailable(String username)
     {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -74,8 +76,7 @@ public class DatabaseManager
             Statement stmt = conn.createStatement();
             String varSQL = "SELECT * "
                     + "FROM Users "
-                    + "WHERE User = " + "'" + username.toLowerCase() + "'"
-                    + " OR Email = " + "'" + email.toLowerCase() + "'";
+                    + "WHERE User = " + "'" + username.toLowerCase() + "'";
             ResultSet result = stmt.executeQuery(varSQL);
             if (stmt.executeQuery(varSQL).absolute(1)) {
                 stmt.close();
