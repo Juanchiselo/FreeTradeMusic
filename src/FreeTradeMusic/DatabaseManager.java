@@ -48,11 +48,45 @@ public class DatabaseManager
                     + "\nPassword: " + password
                     + "\nEmail: " + email);
         // TODO - Rob: Return whether the record was created successfully.
-        return true;
+        if(password.length() < 8 || username.contains(" "))return false;
+        try{
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Connection conn = DriverManager.getConnection(dbURL+dbName,dbUser,dbPW);
+            Statement stmt = conn.createStatement();
+            String varSQL = "INSERT INTO Users (User,Password,Email)" +
+                            "Values('" + username + "'," + "'" + password +
+                            "'," + "'" + email + "'" + ")";
+            int res = stmt.executeUpdate(varSQL);
+            if(res==0) return false;
+            return true;
+        }catch(SQLException |
+                IllegalAccessException |
+                ClassNotFoundException |
+                InstantiationException e){System.out.println("Dead");}
+        return false;
     }
 
-    public boolean isUsernameAvailable(String username)
+    public boolean isUsernameAvailable(String username, String email)
     {
-        return true;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Connection conn = DriverManager.getConnection(dbURL + dbName, dbUser, dbPW);
+            Statement stmt = conn.createStatement();
+            String varSQL = "SELECT * "
+                    + "FROM Users "
+                    + "WHERE User = " + "'" + username.toLowerCase() + "'"
+                    + " OR Email = " + "'" + email.toLowerCase() + "'";
+            ResultSet result = stmt.executeQuery(varSQL);
+            if (stmt.executeQuery(varSQL).absolute(1)) {
+                stmt.close();
+                conn.close();
+                return false;
+            }
+            return true;
+        }catch(SQLException |
+                IllegalAccessException |
+                ClassNotFoundException |
+                InstantiationException e){System.out.println("Dead");}
+        return false;
     }
 }
