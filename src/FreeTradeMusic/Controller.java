@@ -111,7 +111,7 @@ public class Controller
                 && !confirmPassword.isEmpty()
                 && !email.isEmpty())
         {
-            if(DatabaseManager.getInstance().isUsernameAvailable(username,email))
+            if(DatabaseManager.getInstance().isUsernameAvailable(username))
             {
                 if(password.equals(confirmPassword))
                 {
