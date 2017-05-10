@@ -54,7 +54,7 @@ public class DatabaseManager
         //if(isEmailAvailable(email)) return false;
         String varSQL = "INSERT INTO Users (User,Password,Email)" +
                 "Values('" + username.toLowerCase() + "'," + "'" + password +
-                "'," + "'" + email + "'" + ")";
+                "'," + "'" + email.toLowerCase() + "'" + ")";
         try{stmt.executeUpdate(varSQL);}catch(SQLException e){return false;}
         return true;
     }
@@ -71,7 +71,7 @@ public class DatabaseManager
     {
         String varSQL = "SELECT * "
                 + "FROM Users "
-                + "WHERE User = " + "'" + email.toLowerCase() + "'";
+                + "WHERE Email = " + "'" + email.toLowerCase() + "'";
         if (queryDatabase(varSQL).absolute(1)) return false;
         return true;
     }
