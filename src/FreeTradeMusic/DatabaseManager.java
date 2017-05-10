@@ -28,6 +28,7 @@ public class DatabaseManager
                 ClassNotFoundException |
                 InstantiationException e){System.out.println("Dead");}
     }
+    public void exitDatabase() throws SQLException{stmt.close();conn.close();}
     public static DatabaseManager getInstance() throws SQLException
     {
         if(instance == null)
