@@ -51,10 +51,11 @@ public class DatabaseManager
 
     public boolean register(String username, String password, String email) throws SQLException
     {
+        //if(isEmailAvailable(email)) return false;
         String varSQL = "INSERT INTO Users (User,Password,Email)" +
                 "Values('" + username.toLowerCase() + "'," + "'" + password +
-                "'," + "'" + email.toLowerCase() + "'" + ")";
-        if(stmt.executeUpdate(varSQL)==0) return false;
+                "'," + "'" + email + "'" + ")";
+        try{stmt.executeUpdate(varSQL);}catch(SQLException e){return false;}
         return true;
     }
 
@@ -65,5 +66,13 @@ public class DatabaseManager
                 + "WHERE User = " + "'" + username.toLowerCase() + "'";
             if (queryDatabase(varSQL).absolute(1)) return false;
             return true;
+    }
+    public boolean isEmailAvailable(String email) throws SQLException
+    {
+        String varSQL = "SELECT * "
+                + "FROM Users "
+                + "WHERE User = " + "'" + email.toLowerCase() + "'";
+        if (queryDatabase(varSQL).absolute(1)) return false;
+        return true;
     }
 }
