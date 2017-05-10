@@ -27,7 +27,7 @@ public class FreeTradeMusic extends Application
 		loginScene = new Scene(loader.load(), 500, 500);
 
 		// Loads the FXML for the Chat Scene and creates the Scene.
-		loader = new FXMLLoader(getClass().getResource("layouts/FreeTradeMusic.fxml"));
+		loader = new FXMLLoader(getClass().getResource("layouts/MainWindow.fxml"));
 		mainWindow = new Scene(loader.load(), 1280, 720);
 
 		// Loads the FXML for the Chat Scene and creates the Scene.

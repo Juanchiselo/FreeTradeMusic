@@ -30,10 +30,16 @@ public class Controller
         switch (sceneName)
         {
             case "LOGIN":
-                usernameCATextField.clear();
-                passwordCAPasswordField.clear();
-                confirmPasswordCAPasswordField.clear();
-                emailCATextField.clear();
+                if(usernameTextField != null
+                        && passwordPasswordField != null
+                        && confirmPasswordCAPasswordField != null
+                        && emailCATextField != null)
+                {
+                    usernameCATextField.clear();
+                    passwordCAPasswordField.clear();
+                    confirmPasswordCAPasswordField.clear();
+                    emailCATextField.clear();
+                }
                 scene = FreeTradeMusic.loginScene;
                 resizable = false;
                 break;
@@ -94,6 +100,19 @@ public class Controller
             alertUser("Empty Field",
                     "One or both fields are empty.",
                     "ERROR");
+    }
+
+    /**
+     * The event handler for the Logout button in the MainWindow scene.
+     */
+    public void onLogout()
+    {
+//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+//        alert.setTitle("Logout");
+//        alert.setHeaderText("Logout");
+//        alert.setContentText("Are you sure you want to logout?");
+//        alert.showAndWait();
+        switchScene("LOGIN");
     }
 
     /**

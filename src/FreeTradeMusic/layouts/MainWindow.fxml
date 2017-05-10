@@ -2,21 +2,20 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="borderPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../Styles/DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Homework2.Controller">
+<BorderPane fx:id="borderPaneMain" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background" stylesheets="@../styles/DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FreeTradeMusic.Controller">
 
 
    <bottom>
@@ -28,187 +27,73 @@
             </Label>
       </HBox>
    </bottom>
-
-
    <center>
-      <GridPane>
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1233.0" minWidth="10.0" percentWidth="100.0" prefWidth="1100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="100.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <GridPane>
-           <columnConstraints>
-             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-           </columnConstraints>
-           <rowConstraints>
-               <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
-             <RowConstraints minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-           </rowConstraints>
-            <children>
-               <TableView fx:id="lockVariableTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                 <columns>
-                   <TableColumn fx:id="LVprocessIDColumn" editable="false" maxWidth="75.0" prefWidth="75.0" resizable="false" text="Process ID" />
-                     <TableColumn fx:id="LVcrColumn" prefWidth="50.0" resizable="false" text="CR" />
-                     <TableColumn fx:id="LVstateColumn" editable="false" minWidth="60.0" prefWidth="60.0" resizable="false" text="State" />
-                   <TableColumn fx:id="LVexecutionTimeColumn" editable="false" minWidth="70.0" text="Execution Time" />
-                     <TableColumn editable="false" minWidth="100.0" prefWidth="100.0" resizable="false" text="Completion">
-                        <columns>
-                           <TableColumn fx:id="LVcompletionTimeColumn" minWidth="80.0" prefWidth="75.0" text="Time" />
-                           <TableColumn fx:id="LVcompletionPercentColumn" minWidth="60.0" prefWidth="75.0" text="Percentage" />
-                        </columns></TableColumn>
-                 </columns>
-                  <columnResizePolicy>
-                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                  </columnResizePolicy>
-               </TableView>
-               <Label style="-fx-opacity: 1;" text="Process Statistics" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-               <TableView fx:id="strictAlternationTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                  <columns>
-                     <TableColumn fx:id="SAprocessIDColumn" editable="false" maxWidth="75.0" prefWidth="75.0" resizable="false" text="Process ID" />
-                     <TableColumn fx:id="SAcrColumn" prefWidth="50.0" resizable="false" text="CR" />
-                     <TableColumn fx:id="SAstateColumn" editable="false" minWidth="60.0" prefWidth="60.0" resizable="false" text="State" />
-                     <TableColumn fx:id="SAexecutionTimeColumn" editable="false" minWidth="70.0" text="Execution Time" />
-                     <TableColumn editable="false" minWidth="100.0" prefWidth="100.0" resizable="false" text="Completion">
-                        <columns>
-                           <TableColumn fx:id="SAcompletionTimeColumn" minWidth="80.0" prefWidth="75.0" text="Time" />
-                           <TableColumn fx:id="SAcompletionPercentColumn" minWidth="60.0" prefWidth="75.0" text="Percentage" />
-                        </columns>
-                     </TableColumn>
-                  </columns>
-                  <columnResizePolicy>
-                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                  </columnResizePolicy>
-               </TableView>
-               <GridPane style="-fx-background-color: white;">
-                 <columnConstraints>
-                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                 </columnConstraints>
-                 <rowConstraints>
-                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                 </rowConstraints>
-                  <children>
-                     <Label style="-fx-text-fill: black; -fx-opacity: 1;" text="Lock Variable" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  </children>
-               </GridPane>
-               <GridPane style="-fx-background-color: white;" GridPane.columnIndex="1">
-                  <columnConstraints>
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  </columnConstraints>
-                  <rowConstraints>
-                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  </rowConstraints>
-                  <children>
-                     <Label style="-fx-text-fill: black; -fx-opacity: 1;" text="Strict Alternation" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  </children>
-               </GridPane>
-               <Label style="-fx-opacity: 1;" text="Process Statistics" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-            </children>
-         </GridPane>
-      </GridPane>
-   </center>
-   <right>
-      <GridPane prefWidth="270.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <GridPane style="-fx-background-color: black;">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10.0" prefWidth="250.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="10.0" prefWidth="250.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" percentHeight="15.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="3.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="3.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="3.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Button fx:id="newProcessDataButton" mnemonicParsing="false" onAction="#onCreateProcessData" text="New Process Data" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-                     <GridPane.margin>
-                        <Insets left="15.0" right="15.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Label alignment="CENTER" style="-fx-opacity: 100; -fx-font-size: 25;" text="Simulation Configuration" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                        <Button fx:id="startSimulationButton" mnemonicParsing="false" onAction="#onStartSimulation" text="Start Simulation" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="10" GridPane.valignment="CENTER">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Button>
-                  <Label text="If processes already exist, you can start the simulation." textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="9" GridPane.valignment="CENTER" />
-                  <Label alignment="CENTER" text="Quantum Time (ms)" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
-                  <TextField fx:id="quantumTimeTextField" alignment="CENTER" text="500" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
-                  <Slider fx:id="speedSlider" blockIncrement="100.0" majorTickUnit="100.0" max="500.0" minorTickCount="1" onMouseReleased="#onSliderDragged" showTickLabels="true" showTickMarks="true" snapToTicks="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="14" GridPane.valignment="CENTER" />
-                  <Label text="Speed (ms)" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="13" GridPane.valignment="CENTER" />
-                  <Button fx:id="stopSimulationButton" disable="true" mnemonicParsing="false" onAction="#onStopSimulation" text="Stop Simulation" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
-                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <TextField fx:id="processesTextField" alignment="CENTER" promptText="# Processes">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <GridPane.margin>
-                              <Insets right="5.0" />
-                           </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="jobsTextField" alignment="CENTER" promptText="# Jobs" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets left="5.0" />
-                           </GridPane.margin>
-                        </TextField>
-                     </children>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="musicTab" text="Music">
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1233.0" minWidth="10.0" percentWidth="100.0" prefWidth="1100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="100.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <GridPane>
+                       <columnConstraints>
+                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                       </columnConstraints>
+                       <rowConstraints>
+                         <RowConstraints minHeight="10.0" percentHeight="7.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                       </rowConstraints>
+                        <children>
+                           <TableView fx:id="lockVariableTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                             <columns>
+                               <TableColumn fx:id="titleColumn" editable="false" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Title" />
+                                 <TableColumn fx:id="artistColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Artist" />
+                                 <TableColumn fx:id="albumColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Album" />
+                                 <TableColumn fx:id="yearColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Year" />
+                                 <TableColumn fx:id="genreColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Genre" />
+                                 <TableColumn fx:id="durationColumn" maxWidth="-1.0" minWidth="200.0" prefWidth="-1.0" text="Duration" />
+                             </columns>
+                              <columnResizePolicy>
+                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                              </columnResizePolicy>
+                           </TableView>
+                           <GridPane>
+                             <columnConstraints>
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="15.0" prefWidth="100.0" />
+                             </columnConstraints>
+                             <rowConstraints>
+                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                             </rowConstraints>
+                              <children>
+                                 <TextField fx:id="searchTextField" alignment="CENTER" promptText="Search" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                 <Button fx:id="searchButton" mnemonicParsing="false" text="Search" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                 <Label fx:id="logoutButton" onMousePressed="#onLogout" text="Logout">
+                                    <opaqueInsets>
+                                       <Insets />
+                                    </opaqueInsets>
+                                    <GridPane.margin>
+                                       <Insets left="20.0" />
+                                    </GridPane.margin>
+                                 </Label>
+                              </children>
+                           </GridPane>
+                        </children>
+                     </GridPane>
                   </GridPane>
-                  <TextField fx:id="jobTimeTextField" alignment="CENTER" promptText="Max Job Execution Time" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                     <GridPane.margin>
-                        <Insets bottom="10.0" />
-                     </GridPane.margin>
-                  </TextField>
-               </children>
-            </GridPane>
-         </children>
-      </GridPane>
-   </right>
-   <top>
-      <MenuBar style="-fx-background-color: black;" BorderPane.alignment="CENTER">
-        <menus>
-          <Menu id="MainMenuLabel" mnemonicParsing="false" style="-fx-opacity: 1;" text="Mutual Exclusion Method">
-               <items>
-                  <CheckMenuItem fx:id="lvCheckMenu" mnemonicParsing="false" onAction="#onLockVariable" selected="true" style="-fx-text-fill: black; -fx-opacity: 1;" text="Lock Variable" />
-                  <CheckMenuItem fx:id="saCheckMenu" mnemonicParsing="false" onAction="#onStrictAlternation" selected="true" style="-fx-text-fill: black; -fx-opacity: 1;" text="Strict Alternation" />
-               </items></Menu>
-            <Menu mnemonicParsing="false" text="Row Selection">
-              <items>
-                  <CheckMenuItem fx:id="selectProcessCheckMenu" mnemonicParsing="false" onAction="#onSelectRunningProcess" style="-fx-text-fill: black;" text="Select Running Process" selected="true"/>
-              </items>
-            </Menu>
-        </menus>
-      </MenuBar>
-   </top>
+               </content>
+          </Tab>
+            <Tab text="Profile">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
 </BorderPane>
