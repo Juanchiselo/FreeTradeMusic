@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 
 import java.math.BigInteger;
 import java.security.*;
+import java.sql.SQLException;
 
 
 public class Controller
@@ -73,8 +74,7 @@ public class Controller
     /**
      * The event handler for the Login button.
      */
-    public void onLogin()
-    {
+    public void onLogin() throws SQLException {
         String username = usernameTextField.getText().trim();
         String password = passwordPasswordField.getText().trim();
 
@@ -99,8 +99,7 @@ public class Controller
     /**
      * The event handler for the Register button in the Register scene.
      */
-    public void onRegister()
-    {
+    public void onRegister() throws SQLException {
         String username = usernameCATextField.getText().trim();
         String password = passwordCAPasswordField.getText().trim();
         String confirmPassword = confirmPasswordCAPasswordField.getText().trim();
