@@ -30,20 +30,44 @@
      -fx-alignment: center;
 }
 
-
-
-
-
-#loginBorderPane .title {
-    -fx-font-size: 45;
-    -fx-opacity: 1;
-    -fx-text-fill: black;
+/*TAB PANE*/
+.tab-pane {
+    -fx-tab-max-height: 0;
 }
 
+.tab-pane .tab-header-area {
+    visibility: hidden ; /*Hides the TabPane headers.*/
+}
 
+/*TABLE VIEW*/
+.table-view {
+    -fx-base: #1d1d1d; /*Changes the background color of the column headers.*/
+    -fx-control-inner-background: #1d1d1d; /*Changes the background color of the table when there is data in it.*/
+    -fx-background-color: #1d1d1d; /*Changes the background color of the table when there is not data in it.*/
+    -fx-table-cell-border-color: transparent; /*Changes the color of the cell's border aka the grid lines.*/
+    -fx-padding: 0;/*Changes the padding of the columns and headers. Bigger numbers leave more space between the edges of the table.*/
+}
 
+.table-view .column-header {
+    -fx-size: 35; /*Changes the size of the column header.*/
+    -fx-border-width: 0 0 0 0; /*Changes the size of the border on the bottom of the headers if the third value is changed.*/
+}
 
+.table-view .column-header .label {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-opacity: 1;
+}
 
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color; /*Changes the color of the selected row.*/
+}
+
+.table-view .table-column {
+    -fx-alignment: center; /*Centers the text inside the columns of the TableView.*/
+}
 
 
 .label {
@@ -67,41 +91,9 @@
     -fx-opacity: 1;
 }
 
-.table-view {
-    -fx-base: #1d1d1d;
-    -fx-control-inner-background: #1d1d1d;
-    -fx-background-color: #1d1d1d;
-    -fx-table-cell-border-color: transparent;
-    -fx-table-header-border-color: transparent;
-    -fx-padding: 5;
-}
 
-.table-view .column-header-background {
-    -fx-background-color: transparent;
-}
 
-.table-view .column-header, .table-view .filler {
-    -fx-size: 35;
-    -fx-border-width: 0 0 1 0;
-    -fx-border-color:
-        transparent
-        transparent
-        derive(-fx-base, 80%)
-        transparent;
-    -fx-border-insets: 0 10 1 0;
-}
 
-.table-view .column-header .label {
-    -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-alignment: center-left;
-    -fx-opacity: 1;
-}
-
-.table-view:focused .table-row-cell:filled:focused:selected {
-    -fx-background-color: -fx-focus-color;
-}
 
 .split-pane:horizontal > * > .split-pane-divider {
     -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
