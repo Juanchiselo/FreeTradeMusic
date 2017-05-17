@@ -1,70 +1,36 @@
 package FreeTradeMusic;
 
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
 import java.math.BigInteger;
 import java.security.*;
-import java.sql.SQLException;
-
 
 public class Controller
 {
-    @FXML private TextField usernameTextField;
-    @FXML private PasswordField passwordPasswordField;
+    // Login Scene Components.
+    @FXML private TextField usernameLTextField;
+    @FXML private PasswordField passwordLPasswordField;
+    @FXML private Label errorLLabel;
+
+    // Register Scene Components.
     @FXML private TextField usernameCATextField;
     @FXML private PasswordField passwordCAPasswordField;
     @FXML private PasswordField confirmPasswordCAPasswordField;
     @FXML private TextField emailCATextField;
+    @FXML private Label errorCALabel;
 
-    /**
-     * Switches the scenes based on the given sceneName.
-     * @param sceneName - The name of the scene to switch to.
-     */
-    private void switchScene(String sceneName)
-    {
-        Scene scene = null;
-        boolean resizable = false;
+    private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+    private boolean hasErrors;
+    private Error error;
 
-        switch (sceneName)
-        {
-            case "LOGIN":
-                if(usernameTextField != null
-                        && passwordPasswordField != null
-                        && confirmPasswordCAPasswordField != null
-                        && emailCATextField != null)
-                {
-                    usernameCATextField.clear();
-                    passwordCAPasswordField.clear();
-                    confirmPasswordCAPasswordField.clear();
-                    emailCATextField.clear();
-                }
-                scene = FreeTradeMusic.loginScene;
-                resizable = false;
-                break;
-            case "REGISTER":
-                usernameTextField.clear();
-                passwordPasswordField.clear();
-                scene = FreeTradeMusic.createAccountScene;
-                resizable = false;
-                break;
-            case "MAIN_WINDOW":
-                usernameTextField.clear();
-                passwordPasswordField.clear();
-                scene = FreeTradeMusic.mainWindow;
-                resizable = true;
-                break;
-        }
-
-        FreeTradeMusic.stage.setScene(scene);
-        FreeTradeMusic.stage.setResizable(resizable);
-    }
-
+    /*EVENT HANDLERS*/
+    // Login Scene Event Handlers
     /**
      * Event handler for the Register button.
      */
-    public void onCreateAccount()
+    public void onGoToRegister()
     {
         switchScene("REGISTER");
     }
@@ -80,45 +46,41 @@ public class Controller
     /**
      * The event handler for the Login button.
      */
-    public void onLogin() throws SQLException {
-        String username = usernameTextField.getText().trim();
-        String password = passwordPasswordField.getText().trim();
+    public void onLogin()
+    {
+        hasErrors = true;
+        String username = usernameLTextField.getText().trim();
+        String password = passwordLPasswordField.getText().trim();
 
         if(!username.isEmpty() && !password.isEmpty())
         {
             password = hashPassword(password);
-
-            if(DatabaseManager.getInstance().login(username, password))
+            error = DatabaseManager.getInstance().login(username, password);
+            if(error == Error.NO_ERROR)
+            {
+                hasErrors = false;
                 switchScene("MAIN_WINDOW");
-            else
-                alertUser("Wrong Username/Password",
-                        "You entered a wrong username or password.",
-                        "ERROR");
-                // TODO: Put red borders on invalid fields.
+            }
         }
         else
-            alertUser("Empty Field",
-                    "One or both fields are empty.",
-                    "ERROR");
+        {
+            if(username.isEmpty() && password.isEmpty())
+                error = Error.BOTH_EMPTY;
+            else if(username.isEmpty())
+                error = Error.USERNAME_EMPTY;
+            else
+                error = Error.PASSWORD_EMPTY;
+        }
+        setErrors("LOGIN", hasErrors);
     }
 
-    /**
-     * The event handler for the Logout button in the MainWindow scene.
-     */
-    public void onLogout()
-    {
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Logout");
-//        alert.setHeaderText("Logout");
-//        alert.setContentText("Are you sure you want to logout?");
-//        alert.showAndWait();
-        switchScene("LOGIN");
-    }
-
+    // Register Scene Event Handlers.
     /**
      * The event handler for the Register button in the Register scene.
      */
-    public void onRegister() throws SQLException {
+    public void onRegister()
+    {
+        hasErrors = true;
         String username = usernameCATextField.getText().trim();
         String password = passwordCAPasswordField.getText().trim();
         String confirmPassword = confirmPasswordCAPasswordField.getText().trim();
@@ -129,7 +91,8 @@ public class Controller
                 && !confirmPassword.isEmpty()
                 && !email.isEmpty())
         {
-            if(DatabaseManager.getInstance().isUsernameAvailable(username))
+            error = DatabaseManager.getInstance().isUsernameAvailable(username);
+            if(error == Error.NO_ERROR)
             {
                 if(password.equals(confirmPassword))
                 {
@@ -141,6 +104,7 @@ public class Controller
 
                         if(DatabaseManager.getInstance().register(username, password, email))
                         {
+                            hasErrors = false;
                             alertUser("Account Created Successfully",
                                     "Your account was created successfully.",
                                     "INFORMATION");
@@ -151,31 +115,43 @@ public class Controller
                             alertUser("Account Could Not Be Created",
                                     "Your account could not be created.",
                                     "ERROR");
-                            // TODO: Let the user know why.
                         }
-                    }
-                    else
-                    {
-                        alertUser("Invalid Field",
-                                "One of your inputs is invalid.",
-                                "ERROR");
-                        // TODO: Put red borders on invalid fields.
                     }
                 }
                 else
-                    alertUser("Passwords Do Not Match",
-                            "Your passwords do not match. Please try again.",
-                            "ERROR");
+                    error = Error.PASSWORDS_NO_MATCH;
             }
-            else
-                alertUser("Username Not Available",
-                        "The username you entered is not available. "
-                        + "Please try another one.", "ERROR");
         }
         else
-            alertUser("Empty Field",
-                    "One or more fields are empty.",
-                    "ERROR");
+        {
+            if(username.isEmpty() && password.isEmpty()
+                    && confirmPassword.isEmpty() && email.isEmpty())
+                error = Error.ALL_EMPTY;
+            else
+            {
+                if(username.isEmpty())
+                {
+                    error = Error.USERNAME_EMPTY;
+                    setErrors("REGISTER", hasErrors);
+                }
+                if(password.isEmpty())
+                {
+                    error = Error.PASSWORD_EMPTY;
+                    setErrors("REGISTER", hasErrors);
+                }
+                if(confirmPassword.isEmpty())
+                {
+                    error = Error.CONFIRM_PASSWORD_EMPTY;
+                    setErrors("REGISTER", hasErrors);
+                }
+                if(email.isEmpty())
+                {
+                    error = Error.EMAIL_EMPTY;
+                    setErrors("REGISTER", hasErrors);
+                }
+            }
+        }
+        setErrors("REGISTER", hasErrors);
     }
 
     /**
@@ -185,6 +161,51 @@ public class Controller
     public void onCancelRegister()
     {
         switchScene("LOGIN");
+    }
+
+    // Main Scene Event Handlers.
+    /**
+     * Switches the scenes based on the given sceneName.
+     * @param sceneName - The name of the scene to switch to.
+     */
+    private void switchScene(String sceneName)
+    {
+        Scene scene = null;
+        boolean resizable = false;
+        boolean maximized = false;
+
+        switch (sceneName)
+        {
+            case "LOGIN":
+                if(usernameLTextField != null
+                        && passwordLPasswordField != null
+                        && confirmPasswordCAPasswordField != null
+                        && emailCATextField != null)
+                {
+                    usernameCATextField.clear();
+                    passwordCAPasswordField.clear();
+                    confirmPasswordCAPasswordField.clear();
+                    emailCATextField.clear();
+                }
+                scene = FreeTradeMusic.loginScene;
+                break;
+            case "REGISTER":
+                usernameLTextField.clear();
+                passwordLPasswordField.clear();
+                scene = FreeTradeMusic.createAccountScene;
+                break;
+            case "MAIN_WINDOW":
+                usernameLTextField.clear();
+                passwordLPasswordField.clear();
+                scene = FreeTradeMusic.mainWindow;
+                resizable = true;
+                maximized = true;
+                break;
+        }
+
+        FreeTradeMusic.stage.setScene(scene);
+        FreeTradeMusic.stage.setResizable(resizable);
+        FreeTradeMusic.stage.setMaximized(maximized);
     }
 
     /**
@@ -237,6 +258,78 @@ public class Controller
         alert.showAndWait();
     }
 
+    private void setErrors(String scene, boolean enable)
+    {
+        Label errorLabel = null;
+
+        switch(scene)
+        {
+            case "LOGIN":
+                errorLabel = errorLLabel;
+                if(error == Error.BOTH_EMPTY || error == Error.BOTH_WRONG)
+                {
+                    usernameLTextField.pseudoClassStateChanged(errorClass, true);
+                    passwordLPasswordField.pseudoClassStateChanged(errorClass, true);
+                }
+                else if(error == Error.USERNAME_EMPTY || error == Error.USERNAME_WRONG)
+                {
+                    usernameLTextField.pseudoClassStateChanged(errorClass, true);
+                    passwordLPasswordField.pseudoClassStateChanged(errorClass, false);
+                }
+                else if(error == Error.PASSWORD_EMPTY || error == Error.PASSWORD_WRONG)
+                {
+                    usernameLTextField.pseudoClassStateChanged(errorClass, false);
+                    passwordLPasswordField.pseudoClassStateChanged(errorClass, true);
+                }
+                else
+                {
+                    usernameLTextField.pseudoClassStateChanged(errorClass, false);
+                    passwordLPasswordField.pseudoClassStateChanged(errorClass, false);
+                }
+                break;
+            case "REGISTER":
+                errorLabel = errorCALabel;
+//                if(error == Error.ALL_EMPTY)
+//                {
+//                    usernameCATextField.pseudoClassStateChanged(errorClass, true);
+//                    passwordCAPasswordField.pseudoClassStateChanged(errorClass, true);
+//                    confirmPasswordCAPasswordField.pseudoClassStateChanged(errorClass, true);
+//                    emailCATextField.pseudoClassStateChanged(errorClass, true);
+//                }
+//                if(error == Error.USERNAME_EMPTY || error == Error.USERNAME_NOT_AVAILABLE
+//                        || error == Error.USERNAME_INVALID)
+//                {
+//                    usernameCATextField.pseudoClassStateChanged(errorClass, true);
+//                }
+//                if(error == Error.PASSWORD_EMPTY || error == Error.PASSWORD_INVALID
+//                        || error == Error.PASSWORDS_NO_MATCH)
+//                {
+//                    passwordCAPasswordField.pseudoClassStateChanged(errorClass, true);
+//                    confirmPasswordCAPasswordField.pseudoClassStateChanged(errorClass, true);
+//                }
+//                if(error == Error.EMAIL_EMPTY || error == Error.EMAIL_INVALID)
+//                {
+//                    emailCATextField.pseudoClassStateChanged(errorClass, true);
+//                }
+//                if(error == Error.NO_ERROR)
+//                {
+//                    usernameCATextField.pseudoClassStateChanged(errorClass, false);
+//                    passwordCAPasswordField.pseudoClassStateChanged(errorClass, false);
+//                    confirmPasswordCAPasswordField.pseudoClassStateChanged(errorClass, false);
+//                    emailCATextField.pseudoClassStateChanged(errorClass, false);
+//                }
+                break;
+            default:
+                System.err.println("ERROR: " + scene + " is not a valid scene.");
+        }
+
+        if(errorLabel != null)
+        {
+            errorLabel.setText("ERROR: " + error.getDescription());
+            errorLabel.setVisible(enable);
+        }
+    }
+
     /**
      * Checks if a user given input is valid.
      * @param input - The input given by the user.
@@ -246,6 +339,7 @@ public class Controller
     private boolean isInputValid(String input, String type)
     {
         String regex = "";
+        boolean valid = false;
 
         switch (type.toUpperCase())
         {
@@ -260,6 +354,9 @@ public class Controller
                 break;
         }
 
-        return input.matches(regex);
+        valid = input.matches(regex);
+        if(!valid)
+            setErrors("REGISTER", true);
+        return valid;
     }
 }

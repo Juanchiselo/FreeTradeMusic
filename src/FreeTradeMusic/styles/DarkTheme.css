@@ -1,8 +1,38 @@
+/*
+ * Jose Juan Sandoval
+ */
+
 .background {
-    /*-fx-background-color: #1d1d1d;*/
-    -fx-background-image:url("../drawables/ConcertBackground01Blur.jpg");
+    -fx-background-image: url("../drawables/ConcertBackground01Blur.jpg");
     -fx-background-size: cover;
 }
+
+/*LABEL BUTTON*/
+.labelButton:hover {
+    -fx-opacity: 1;
+}
+
+/*TEXT FIELD*/
+.text-field:error {
+  -fx-background-color: red,linear-gradient(to bottom, derive(red,60%) 5%,derive(red,90%) 40%);
+}
+
+#labelError {
+    -fx-font-size: 18;
+    -fx-opacity: 1;
+    -fx-text-fill: white;
+}
+
+/*CHOICEBOX*/
+.choice-box .label {
+     -fx-opacity: 1;
+     -fx-text-fill: black;
+     -fx-alignment: center;
+}
+
+
+
+
 
 #loginBorderPane .title {
     -fx-font-size: 45;
@@ -10,14 +40,9 @@
     -fx-text-fill: black;
 }
 
-.labelButton:hover {
-    -fx-opacity: 1;
-}
 
-.text-field.error {
-  -fx-text-box-border: red ;
-  -fx-focus-color: red ;
-}
+
+
 
 
 

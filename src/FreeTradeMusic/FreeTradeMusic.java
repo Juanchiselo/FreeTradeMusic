@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 
 
@@ -51,5 +52,6 @@ public class FreeTradeMusic extends Application
 	
 	public static void main(String[] args) {
 		launch(args);
+		DatabaseManager.getInstance().exitDatabase();
 	}
 }

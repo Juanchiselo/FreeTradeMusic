@@ -21,6 +21,7 @@
             </columnConstraints>
             <rowConstraints>
             <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="60.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="320.6666564941406" percentHeight="10.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="15.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="320.6666564941406" minHeight="0.0" percentHeight="15.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="320.6666564941406" minHeight="10.0" percentHeight="15.0" prefHeight="89.33333587646484" vgrow="SOMETIMES" />
@@ -36,7 +37,7 @@
                   <DropShadow />
                </effect>
             </ImageView>
-                  <TextField fx:id="usernameTextField" alignment="CENTER" onAction="#onLogin" prefHeight="37.0" prefWidth="278.0" promptText="Username" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <TextField fx:id="usernameLTextField" alignment="CENTER" onAction="#onLogin" prefHeight="37.0" prefWidth="278.0" promptText="Username" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets left="100.0" right="100.0" />
                </GridPane.margin>
@@ -44,7 +45,7 @@
                   <DropShadow />
                </effect>
             </TextField>
-            <PasswordField fx:id="passwordPasswordField" alignment="CENTER" onAction="#onLogin" promptText="Password" GridPane.rowIndex="2">
+            <PasswordField fx:id="passwordLPasswordField" alignment="CENTER" onAction="#onLogin" promptText="Password" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="100.0" right="100.0" />
                </GridPane.margin>
@@ -52,8 +53,8 @@
                   <DropShadow />
                </effect>
             </PasswordField>
-                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onLogin" style="-fx-font-size: 18;" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-            <GridPane GridPane.rowIndex="4">
+                  <Button fx:id="loginButton" mnemonicParsing="false" onAction="#onLogin" style="-fx-font-size: 18;" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <GridPane GridPane.rowIndex="5">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -62,10 +63,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="registerLabel" onMouseClicked="#onCreateAccount" styleClass="labelButton" text="Register" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Label fx:id="registerLabel" onMouseClicked="#onGoToRegister" styleClass="labelButton" text="Register" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <Label fx:id="forgotPasswordLabel" onMouseClicked="#onForgotPassword" styleClass="labelButton" text="Forgot Password?" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
+            <Label id="labelError" fx:id="errorLLabel" textAlignment="CENTER" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             </children>
         </GridPane>
    </left>
