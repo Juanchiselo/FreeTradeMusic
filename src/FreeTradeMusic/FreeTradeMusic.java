@@ -6,6 +6,9 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.http.HttpService;
 
 import javax.xml.crypto.Data;
 import java.io.IOException;
@@ -50,8 +53,12 @@ public class FreeTradeMusic extends Application
 		stage.show();
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		launch(args);
 		DatabaseManager.getInstance().exitDatabase();
+        Web3j web3 = Web3j.build(new HttpService());
+        Web3ClientVersion clientversion = web3.web3ClientVersion().sendAsync().get();
+        System.out.println("Client is running version: " + clientversion.getWeb3ClientVersion());
+
 	}
 }
