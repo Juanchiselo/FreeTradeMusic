@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 public class DatabaseManager
 {
@@ -39,29 +40,24 @@ public class DatabaseManager
         return instance;
     }
 
-    public void exitDatabase()
-    {
-        try {
-            stmt.close();
-            conn.close();
-        } catch(SQLException e) {
-            System.err.println("ERROR: " + e.getMessage());
-        }
+    private ResultSet queryDatabase(String query){
+        try{return stmt.executeQuery(query);}
+        catch(SQLException e){System.out.println("ERROR: " + e.getMessage());}
+        return null;
     }
-
-    private ResultSet queryDatabase(String query) throws SQLException{return stmt.executeQuery(query);}
 
     public Error login(String username, String password)
     {
-        varSQL = "SELECT * "
+        String userTest = "SELECT * "
                 + "FROM Users "
-                + "WHERE User = " + "'" + username + "'"
-                + " AND Password = " + "'" + password + "'";
-
+                + "WHERE User = " + "'" + username + "'";
+        String pwTest = "SELECT * "
+                + "FROM Users "
+                + "WHERE Password = " + "'" + password + "'";
         try {
-            if(!queryDatabase(varSQL).absolute(1)){return Error.USERNAME_WRONG;}
+            if(!queryDatabase(userTest).absolute(1)){return Error.USERNAME_WRONG;}
+            else if(!queryDatabase(pwTest).absolute(1)){return Error.PASSWORD_WRONG;}
             else{
-
                 // TODO: Create a user object with the data you got from the database.
                 return Error.NO_ERROR;}
         } catch (SQLException e) {
@@ -107,6 +103,7 @@ public class DatabaseManager
     public ObservableList<Song> getSongs()
     {
         ObservableList<Song> songs = FXCollections.observableArrayList();
+        /*
         int numberOfSongs = 1;
         String title = "Jailbreak";
         String artist = "AWOLNATION";
@@ -114,14 +111,32 @@ public class DatabaseManager
         String genre = "Alternative Rock";
         int year = 2015;
         int duration = 281;//Duration is in seconds.
+        */
+        varSQL = "SELECT Title,Artist,Album,Genre,Year,Duration "
+                + "FROM Music";
+        try{
+            ResultSet rs = stmt.executeQuery(varSQL);
+            while (rs.next()) {
+                songs.add(new Song(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getInt(6)));
+            }
+        }catch(SQLException e){}
+
+
 
         // TODO: Rob query the database and get the songs.
+        /*
         for(int i = 0; i < numberOfSongs; i++)
         {
             songs.add(new Song(title, artist, album, genre, year, duration));
         }
 
         songs.add(new Song("Hello", "Adele", "25", "Pop", 2016, 227));
+        */
 
         return songs;
     }

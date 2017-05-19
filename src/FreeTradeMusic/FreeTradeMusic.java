@@ -55,7 +55,6 @@ public class FreeTradeMusic extends Application
 	
 	public static void main(String[] args) throws Exception{
 		launch(args);
-		DatabaseManager.getInstance().exitDatabase();
         Web3j web3 = Web3j.build(new HttpService());
         Web3ClientVersion clientversion = web3.web3ClientVersion().sendAsync().get();
         System.out.println("Client is running version: " + clientversion.getWeb3ClientVersion());
