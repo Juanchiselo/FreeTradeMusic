@@ -12,6 +12,11 @@
     -fx-opacity: 1;
 }
 
+.labelButtonMenu{
+    -fx-size: 100;
+    -fx-opacity: 1;
+}
+
 /*TEXT FIELD*/
 .text-field:error {
   -fx-background-color: red,linear-gradient(to bottom, derive(red,60%) 5%,derive(red,90%) 40%);
