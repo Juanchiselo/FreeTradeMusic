@@ -4,6 +4,8 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 
+//On Command line: "geth --rpcapi personal,db,eth,net,web3 --rpc --testnet"
+
 public class Blockchain extends Thread
 {
 
