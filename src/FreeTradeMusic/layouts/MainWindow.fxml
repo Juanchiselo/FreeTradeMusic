@@ -105,9 +105,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label styleClass="labelButtonMenu" text="Music Library" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Label styleClass="labelButtonMenu" text="Profile" underline="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Label styleClass="labelButtonMenu" text="Wallet" underline="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label styleClass="labelButton" text="Music Library" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label styleClass="labelButton" text="Profile" underline="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Label styleClass="labelButton" text="Wallet" underline="true" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Label fx:id="logoutButton" onMousePressed="#onLogout" styleClass="labelButton" text="Logout" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <opaqueInsets>
                   <Insets />
