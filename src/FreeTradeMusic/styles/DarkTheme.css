@@ -7,13 +7,25 @@
     -fx-background-size: cover;
 }
 
-/*LABEL BUTTON*/
-.labelButton:hover {
+/*LABELS*/
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 0.6;
+}
+
+.labelMenuButton {
+    -fx-font-size: 16pt;
+    -fx-opacity: 0.7;
+    -fx-text-fill: white;
+}
+
+.labelMenuButton:hover {
     -fx-opacity: 1;
 }
 
-.labelButtonMenu{
-    -fx-size: 100;
+.labelButton:hover {
     -fx-opacity: 1;
 }
 
@@ -37,11 +49,12 @@
 
 /*TAB PANE*/
 .tab-pane {
-    -fx-tab-max-height: 0;
+    -fx-tab-max-height: -1;
 }
 
-.tab-pane .tab-header-area {
-    visibility: hidden ; /*Hides the TabPane headers.*/
+
+.tab-header-background {
+    -fx-background-color: white;
 }
 
 /*TABLE VIEW*/
@@ -74,43 +87,34 @@
     -fx-alignment: center; /*Centers the text inside the columns of the TableView.*/
 }
 
-
-.label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
-    -fx-opacity: 0.6;
-}
-
-.label-bright {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+.contextMenu .label {
+    -fx-text-fill: black;
     -fx-opacity: 1;
 }
 
-.label-header {
-    -fx-font-size: 32pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-opacity: 1;
+.playerButton{
+    -fx-background-size: cover;
 }
 
+.playButton {
+    -fx-graphic: url("./drawables/Music Player Buttons/play.png");
+}
 
+.playButton:hover {
+    -fx-graphic: url("./drawables/Music Player Buttons/pause.png");
+}
 
+.split-pane{
+    -fx-background-color: black;
+}
 
-
-.split-pane:horizontal > * > .split-pane-divider {
+.split-pane-divider{
     -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
     -fx-background-color: transparent, derive(#1d1d1d,20%);
 }
 
-.split-pane {
-    -fx-padding: 1 0 0 0;
-}
-
 .menu {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .menu-bar {
@@ -121,8 +125,8 @@
 .menu-bar .label {
     -fx-font-size: 12pt;
     -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-    -fx-opacity: 0.9;
+    -fx-text-fill: black;
+    -fx-opacity: 1;
 }
 
 .text-field {

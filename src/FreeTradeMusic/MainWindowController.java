@@ -1,58 +1,251 @@
 package FreeTradeMusic;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
+import javafx.util.Duration;
+import org.apache.tika.metadata.Metadata;
 
-import java.util.Optional;
+import java.io.File;
+import java.util.*;
 
 public class MainWindowController
 {
     // TableView
-    @FXML private TableView<Song> songsTableView;
-    @FXML private TableColumn<Song, String> titleColumn;
-    @FXML private TableColumn<Song, String> artistColumn;
-    @FXML private TableColumn<Song, String> albumColumn;
-    @FXML private TableColumn<Song, Integer> yearColumn;
-    @FXML private TableColumn<Song, String> genreColumn;
-    @FXML private TableColumn<Song, Integer> durationColumn;
+    @FXML private TableView<Song> storeTableView;
+    @FXML private TableColumn<Song, String> storeTitleColumn;
+    @FXML private TableColumn<Song, String> storeArtistColumn;
+    @FXML private TableColumn<Song, String> storeAlbumColumn;
+    @FXML private TableColumn<Song, Integer> storeYearColumn;
+    @FXML private TableColumn<Song, String> storeGenreColumn;
+    @FXML private TableColumn<Song, Integer> storeDurationColumn;
     private ObservableList<Song> songs = FXCollections.observableArrayList();
 
-    @FXML private ChoiceBox<String> filterChoiceBox;
-    @FXML private TextField filterTextField;
+    // TableView
+    @FXML private TableView<Song> userSongsTableView;
+    @FXML private TableColumn<Song, String> userTitleColumn;
+    @FXML private TableColumn<Song, String> userArtistColumn;
+    @FXML private TableColumn<Song, String> userAlbumColumn;
+    @FXML private TableColumn<Song, Integer> userYearColumn;
+    @FXML private TableColumn<Song, String> userGenreColumn;
+    @FXML private TableColumn<Song, Integer> userDurationColumn;
+
+    @FXML private ChoiceBox<String> storeFilterChoiceBox;
+    @FXML private TextField storeFilterTextField;
+
+    @FXML private ChoiceBox<String> userFilterChoiceBox;
+    @FXML private TextField userFilterTextField;
+
+    @FXML private TabPane mainWindowTabPane;
+    @FXML private Tab homeTab;
+    @FXML private Tab storeTab;
+    @FXML private Tab profileTab;
+    @FXML private Tab walletTab;
+    @FXML private Tab submitSongTab;
+    @FXML private Tab editProfileTab;
+
+    @FXML private TabPane userTabPane;
+    @FXML private Tab musicLibraryTab;
+
+    @FXML private ContextMenu songsContextMenu;
+
+    @FXML private Label statusLabel;
+
+    @FXML private ImageView backButton;
+    @FXML private ImageView rewindButton;
+    @FXML private ImageView playButton;
+    @FXML private ImageView pauseButton;
+    @FXML private ImageView forwardButton;
+    @FXML private ImageView nextButton;
+    @FXML private ImageView repeatButton;
+    @FXML private ImageView shuffleButton;
+    @FXML private GridPane musicPlayerGridPane;
+    public Timer timer = new Timer();
+
+    @FXML private Label titleLabel;
+    @FXML private Label artistLabel;
+    @FXML public Label currentTimeLabel;
+    @FXML private Label durationLabel;
+    @FXML private Slider timeSlider;
+
+    @FXML private TextField titleTextField;
+    @FXML private TextField albumTextField;
+    @FXML private TextField genreTextField;
+    @FXML private TextField yearTextField;
+    @FXML private Button submitSongButton;
+
+    File file;
+    List<File> files;
+    FileChooser fileChooser = new FileChooser();
+
+    private final PseudoClass errorClass = PseudoClass.getPseudoClass("error");
+    private ArrayList<Error> errors = new ArrayList<>();
+    private Error error;
+    private ArrayList<TextField> textFields = new ArrayList<>();
+
+    private Metadata metadata;
 
     public void initialize()
     {
+        textFields.add(titleTextField);
+        textFields.add(albumTextField);
+        textFields.add(genreTextField);
+        textFields.add(yearTextField);
+
+
         songs = DatabaseManager.getInstance().getSongs();
 
-        titleColumn.setCellValueFactory(
+        storeTitleColumn.setCellValueFactory(
                 new PropertyValueFactory<>("title"));
 
-        artistColumn.setCellValueFactory(
+        storeArtistColumn.setCellValueFactory(
                 new PropertyValueFactory<>("artist"));
 
-        albumColumn.setCellValueFactory(
+        storeAlbumColumn.setCellValueFactory(
                 new PropertyValueFactory<>("album"));
 
-        yearColumn.setCellValueFactory(
+        storeYearColumn.setCellValueFactory(
                 new PropertyValueFactory<>("year"));
 
-        genreColumn.setCellValueFactory(
+        storeGenreColumn.setCellValueFactory(
                 new PropertyValueFactory<>("genre"));
 
-        durationColumn.setCellValueFactory(
+        storeDurationColumn.setCellValueFactory(
                 new PropertyValueFactory<>("duration"));
 
+
+
+        userTitleColumn.setCellValueFactory(
+                new PropertyValueFactory<>("title"));
+
+        userArtistColumn.setCellValueFactory(
+                new PropertyValueFactory<>("artist"));
+
+        userAlbumColumn.setCellValueFactory(
+                new PropertyValueFactory<>("album"));
+
+        userYearColumn.setCellValueFactory(
+                new PropertyValueFactory<>("year"));
+
+        userGenreColumn.setCellValueFactory(
+                new PropertyValueFactory<>("genre"));
+
+        userDurationColumn.setCellValueFactory(
+                new PropertyValueFactory<>("duration"));
+
+
+
+        storeFilterChoiceBox.getSelectionModel().selectedIndexProperty()
+                .addListener((observable, oldValue, newValue) ->
+                {
+                    storeFilterTextField.clear();
+
+                    if(newValue.intValue() == 5)
+                        showFavoriteArtists();
+                    else
+                        updateSongsTable("STORE", songs);
+                });
+
+        userFilterChoiceBox.getSelectionModel().selectedIndexProperty()
+                .addListener((observable, oldValue, newValue) ->
+                {
+                    userFilterTextField.clear();
+
+                    if(newValue.intValue() == 5)
+                        showFavoriteArtists();
+                    else
+                        if(FreeTradeMusic.user != null)
+                            updateSongsTable("USER", FreeTradeMusic.user.getOwnedSongs());
+                });
+
+        // Initializes the Filter ChoiceBox.
+        storeFilterChoiceBox.setItems(FXCollections.observableArrayList(
+                "Title", "Artist", "Album", "Year",
+                "Genre", "Favorite Artists"));
+        storeFilterChoiceBox.getSelectionModel().selectFirst();
+
+        userFilterChoiceBox.setItems(FXCollections.observableArrayList(
+                "Title", "Artist", "Album", "Year",
+                "Genre", "Favorite Artists"));
+        userFilterChoiceBox.getSelectionModel().selectFirst();
+
+        // Right click context menu.
+        storeTableView.addEventHandler(MouseEvent.MOUSE_CLICKED, t ->
+        {
+            if(t.getButton() == MouseButton.SECONDARY)
+                songsContextMenu.show(storeTableView, t.getScreenX() , t.getScreenY());
+        });
+
+
+
+//        timeSlider.valueProperty().addListener(new InvalidationListener() {
+//            public void invalidated(Observable ov)
+//            {
+//                if (timeSlider.isValueChanging())
+//                {
+//                    // multiply duration by percentage calculated by slider position
+//                    if (duration != null) {
+//                        mediaPlayer.seek(duration.multiply(slider.getValue() / 100.0));
+//                    }
+//                    updateValues();
+//
+//                }
+//            }
+//        });
+//
+//        MusicPlayer.getInstance().mediaPlayer.currentTimeProperty()
+//                .addListener(new ChangeListener()
+//                {
+//
+//            @Override
+//            public void changed(ObservableValue observable, Duration oldValue, Duration newValue)
+//            {
+//                updateValues();
+//            }
+//        });
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("MP3", "*.mp3")
+        );
+    }
+
+
+    protected void updateValues()
+    {
+        if (timeSlider != null)
+        {
+            Platform.runLater(() -> {
+                Duration currentTime = MusicPlayer.getInstance().mediaPlayer.getCurrentTime();
+                currentTimeLabel.setText(currentTime.toString());
+//                    //timeSlider.setDisable(duration.isUnknown());
+//                    if (!timeSlider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeSlider.isValueChanging()) {
+//                        slider.setValue(currentTime.divide(duration).toMillis() * 100.0);
+//                    }
+
+            });
+        }
+    }
+
+
+    public void attachFilter(TableView<Song> tableView, ObservableList<Song> songs)
+    {
         FilteredList<Song> filteredData = new FilteredList<>(songs, p -> true);
 
-        filterTextField.textProperty().addListener((observable, oldValue, newValue)
+        storeFilterTextField.textProperty().addListener((observable, oldValue, newValue)
                 -> filteredData.setPredicate(song ->
         {
-            String filter = filterChoiceBox.getValue();
+            String filter = storeFilterChoiceBox.getValue();
             // If filter text is empty, display all songs.
             if (newValue == null || newValue.isEmpty())
                 return true;
@@ -62,7 +255,7 @@ public class MainWindowController
             if (filter.equals("Title")
                     && song.getTitle().toLowerCase().contains(lowerCaseFilter))
                 return true;
-            else if (filter.equals("Artist")
+            else if ((filter.equals("Artist") || filter.equals("Favorite Artists"))
                     && song.getArtist().toLowerCase().contains(lowerCaseFilter))
                 return true;
             else if (filter.equals("Album")
@@ -81,22 +274,34 @@ public class MainWindowController
         SortedList<Song> sortedData = new SortedList<>(filteredData);
 
         // 4. Bind the SortedList comparator to the TableView comparator.
-        sortedData.comparatorProperty().bind(songsTableView.comparatorProperty());
+        sortedData.comparatorProperty().bind(tableView.comparatorProperty());
 
         // 5. Add sorted (and filtered) data to the table.
-        songsTableView.setItems(sortedData);
-
-        filterChoiceBox.setItems(FXCollections.observableArrayList(
-                "Title", "Artist", "Album", "Year",
-                "Genre", "Favorite Artists"));
-        filterChoiceBox.getSelectionModel().selectFirst();
+        tableView.setItems(sortedData);
     }
 
-    public void updateSongsTable()
+    public void updateSongsTable(String table, ObservableList<Song> songs)
     {
-        songs = DatabaseManager.getInstance().getSongs();
-        songsTableView.setItems(songs);
-        songsTableView.refresh();
+        TableView<Song> tableView = null;
+        switch (table)
+        {
+            case "STORE":
+                tableView = storeTableView;
+                break;
+            case "USER":
+                tableView = userSongsTableView;
+                break;
+        }
+
+        attachFilter(tableView, songs);
+        tableView.refresh();
+    }
+
+    private void updateStoreTable()
+    {
+        //songs = DatabaseManager.getInstance().getSongs();
+        attachFilter(storeTableView, songs);
+        storeTableView.refresh();
     }
 
     /**
@@ -111,8 +316,260 @@ public class MainWindowController
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK)
         {
+            MusicPlayer.getInstance().stopSong();
             FreeTradeMusic.stage.setScene(FreeTradeMusic.loginScene);
             FreeTradeMusic.stage.setResizable(false);
         }
+    }
+
+    public void onGoToHome()
+    {
+        mainWindowTabPane.getSelectionModel().select(homeTab);
+    }
+
+    public void onGoToStore()
+    {
+        mainWindowTabPane.getSelectionModel().select(storeTab);
+    }
+
+    public void onGoToProfile()
+    {
+        mainWindowTabPane.getSelectionModel().select(profileTab);
+    }
+
+    public void onGoToWallet()
+    {
+        mainWindowTabPane.getSelectionModel().select(walletTab);
+    }
+
+    public void onGoToMusicLibrary()
+    {
+        userTabPane.getSelectionModel().select(musicLibraryTab);
+    }
+
+    public void onGoToSubmitSong()
+    {
+        mainWindowTabPane.getSelectionModel().select(submitSongTab);
+    }
+
+    public void onAddFavoriteArtist()
+    {
+        Song song = storeTableView.getSelectionModel().getSelectedItem();
+        FreeTradeMusic.user.addFavoriteArtist(song.getArtist());
+    }
+
+    public void onRemoveFavoriteArtist()
+    {
+        Song song = storeTableView.getSelectionModel().getSelectedItem();
+        FreeTradeMusic.user.removeFavoriteArtist(song.getArtist());
+        showFavoriteArtists();
+    }
+
+    private void showFavoriteArtists()
+    {
+        ObservableList<Song> songs = FXCollections.observableArrayList();
+
+        for(Song song : this.songs)
+        {
+            if(FreeTradeMusic.user.getFavoriteArtists()
+                    .contains(song.getArtist()))
+                songs.add(song);
+        }
+
+        updateSongsTable("STORE", songs);
+    }
+
+
+    public void onSubmitSong()
+    {
+        String title = titleTextField.getText().trim();
+        String album = albumTextField.getText().trim();
+        String genre = genreTextField.getText().trim();
+        String yearString = yearTextField.getText().trim();
+
+        if(album.isEmpty())
+            albumTextField.setText("Single Release");
+
+        if(!title.isEmpty() && !genre.isEmpty() && !yearString.isEmpty() && file != null)
+        {
+            int duration = (int)Double.parseDouble(metadata.get("xmpDM:duration")) / 1000;
+            int year = Integer.valueOf(yearString);
+
+            errors.add(DatabaseManager.getInstance().submitSong(title, FreeTradeMusic.user.getUsername(),
+                    album, genre, year, duration, file));
+
+            if(errors.get(0) == Error.NO_ERROR)
+            {
+                // TODO: Delete this just update the table.
+                songs.add(new Song(title, FreeTradeMusic.user.getUsername(), album,
+                        genre, year, duration, file.getAbsolutePath()));
+                updateStoreTable();
+
+                alertUser("Song has been submitted successfully",
+                        "Your song has been submitted successfully.",
+                        "INFORMATION");
+            }
+        }
+        else
+        {
+            if(title.isEmpty())
+                errors.add(Error.TITLE_EMPTY);
+            if(genre.isEmpty())
+                errors.add(Error.GENRE_EMPTY);
+            if(yearString.isEmpty())
+                errors.add(Error.YEAR_EMPTY);
+        }
+
+        setErrors();
+    }
+
+    public void onLocateFile()
+    {
+        fileChooser.setTitle("Locate File");
+        file = fileChooser.showOpenDialog(FreeTradeMusic.stage);
+        if(file != null)
+        {
+            submitSongButton.setDisable(false);
+            metadata = FileParser.getInstance()
+                    .getMetadata(file.getAbsolutePath());
+
+            titleTextField.setText(metadata.get("title"));
+            albumTextField.setText(metadata.get("xmpDM:album"));
+            genreTextField.setText(metadata.get("xmpDM:genre"));
+            yearTextField.setText(metadata.get("xmpDM:releaseDate"));
+        }
+    }
+
+    public void onLocateFiles()
+    {
+        fileChooser.setTitle("Locate Files");
+        files = fileChooser.showOpenMultipleDialog(FreeTradeMusic.stage);
+        if(files != null)
+            submitSongButton.setDisable(false);
+    }
+
+    public void onAddSongToPlaylist()
+    {
+        Song song = storeTableView.getSelectionModel().getSelectedItem();
+        MusicPlayer.getInstance().addToPlaylist(song);
+        musicPlayerGridPane.setDisable(false);
+    }
+
+    public void onPlay()
+    {
+        MusicPlayer.getInstance().playSong();
+        playButton.setVisible(false);
+        pauseButton.setVisible(true);
+    }
+
+    public void onPause()
+    {
+        MusicPlayer.getInstance().pauseSong();
+        pauseButton.setVisible(false);
+        playButton.setVisible(true);
+    }
+
+    public void onNext()
+    {
+        MusicPlayer.getInstance().nextSong();
+    }
+
+    public void onPrevious()
+    {
+        MusicPlayer.getInstance().previousSong();
+    }
+
+    public void updateMusicPlayer(String title, String artist,
+                                  String duration)
+    {
+        titleLabel.setText(title);
+        artistLabel.setText(artist);
+        durationLabel.setText(duration);
+
+        timer.scheduleAtFixedRate(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                Platform.runLater(() ->
+                        currentTimeLabel.setText(MusicPlayer
+                                .getInstance().getCurrentTime()));
+            }
+        }, 0, 1000);
+    }
+
+    private void clearSubmissionForm()
+    {
+        for(TextField textField : textFields)
+            textField.clear();
+        submitSongButton.setDisable(true);
+    }
+
+    /**
+     * Displays the status messages located in the status bar.
+     * @param type - The type of the status message.
+     * @param message - The message to display.
+     */
+    public void setStatus(String type, String message)
+    {
+        if(type.equals("ERROR"))
+            statusLabel.setStyle("-fx-text-fill: red");
+        else
+            statusLabel.setStyle("-fx-text-fill: white");
+
+        statusLabel.setText(type + ": " + message);
+    }
+
+    private void setErrors()
+    {
+        for(TextField textField : textFields)
+            textField.pseudoClassStateChanged(errorClass, false);
+
+        for(Error error : errors)
+        {
+            switch(error)
+            {
+                case TITLE_EMPTY:
+                    titleTextField.pseudoClassStateChanged(errorClass, true);
+                    break;
+                case GENRE_EMPTY:
+                    genreTextField.pseudoClassStateChanged(errorClass, true);
+                    break;
+                case YEAR_EMPTY:
+                    yearTextField.pseudoClassStateChanged(errorClass, true);
+                    break;
+                case NO_ERROR:
+                    clearSubmissionForm();
+            }
+        }
+
+        errors.clear();
+    }
+
+    /**
+     * Displays error messages in the form of alerts.
+     * @param title - The title of the alert.
+     * @param errorMessage - The error message.
+     */
+    private void alertUser(String title, String errorMessage, String type)
+    {
+        Alert alert = new Alert(Alert.AlertType.NONE);
+
+        switch (type)
+        {
+            case "INFORMATION":
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                break;
+            case "ERROR":
+                alert = new Alert(Alert.AlertType.ERROR);
+                break;
+            case "CONFIRMATION":
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
+        }
+
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(errorMessage);
+        alert.showAndWait();
     }
 }

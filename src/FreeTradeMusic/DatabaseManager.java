@@ -3,6 +3,7 @@ package FreeTradeMusic;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -21,7 +22,7 @@ public class DatabaseManager
     private Connection conn;
     private String varSQL;
 
-    protected DatabaseManager()
+    private DatabaseManager()
     {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -59,6 +60,8 @@ public class DatabaseManager
             else if(!queryDatabase(pwTest).absolute(1)){return Error.PASSWORD_WRONG;}
             else{
                 // TODO: Create a user object with the data you got from the database.
+                FreeTradeMusic.user = new User("User", "Pass", "fake@outlook.com",
+                        "User", "Name");
                 return Error.NO_ERROR;}
         } catch (SQLException e) {
             return Error.DATABASE_ERROR;
@@ -103,15 +106,7 @@ public class DatabaseManager
     public ObservableList<Song> getSongs()
     {
         ObservableList<Song> songs = FXCollections.observableArrayList();
-        /*
-        int numberOfSongs = 1;
-        String title = "Jailbreak";
-        String artist = "AWOLNATION";
-        String album = "Run";
-        String genre = "Alternative Rock";
-        int year = 2015;
-        int duration = 281;//Duration is in seconds.
-        */
+
         varSQL = "SELECT Title,Artist,Album,Genre,Year,Duration "
                 + "FROM Music";
         try{
@@ -122,22 +117,28 @@ public class DatabaseManager
                         rs.getString(3),
                         rs.getString(4),
                         rs.getInt(5),
-                        rs.getInt(6)));
+                        rs.getInt(6),
+                        null));
             }
         }catch(SQLException e){}
-
-
-
-        // TODO: Rob query the database and get the songs.
-        /*
-        for(int i = 0; i < numberOfSongs; i++)
-        {
-            songs.add(new Song(title, artist, album, genre, year, duration));
-        }
-
-        songs.add(new Song("Hello", "Adele", "25", "Pop", 2016, 227));
-        */
-
         return songs;
+    }
+
+    public Error submitSong(String title, String artist, String album, String genre, int year, int duration, File file)
+    {
+        String url;
+
+        // TODO: Upload actual file to Amazon server and get the url.
+        url = uploadFile(file);
+
+        // TODO: INSERT song information into database including url but not the file and return error code.
+        return Error.NO_ERROR;
+    }
+
+    private String uploadFile(File file)
+    {
+        String url = "";
+
+        return url;
     }
 }

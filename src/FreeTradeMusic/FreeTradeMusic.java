@@ -4,13 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
-
-import javax.xml.crypto.Data;
 import java.io.IOException;
 
 
@@ -18,10 +15,12 @@ public class FreeTradeMusic extends Application
 {
 	// TODO - Jose: Move all this to the controller, maybe create a GUIManager.
 	public static Controller controller;
+	public static MainWindowController mainWindowController;
 	public static Scene mainWindow;
 	public static Scene loginScene;
 	public static Scene createAccountScene;
 	public static Stage stage;
+	public static User user;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException
@@ -33,6 +32,7 @@ public class FreeTradeMusic extends Application
 		// Loads the FXML for the Chat Scene and creates the Scene.
 		loader = new FXMLLoader(getClass().getResource("layouts/MainWindow.fxml"));
 		mainWindow = new Scene(loader.load(), 1280, 720);
+		mainWindowController = loader.getController();
 
 		// Loads the FXML for the Chat Scene and creates the Scene.
 		loader = new FXMLLoader(getClass().getResource("layouts/CreateAccount.fxml"));
@@ -53,12 +53,10 @@ public class FreeTradeMusic extends Application
 		stage.show();
 	}
 	
-	public static void main(String[] args) throws Exception{
-	    new Blockchain().start();
+	public static void main(String[] args)
+	{
+	    //new Blockchain().start();
 		launch(args);
-    Web3j web3 = Web3j.build(new HttpService());
-    Web3ClientVersion clientversion = web3.web3ClientVersion().sendAsync().get();
-    System.out.println("Client is running version: " + clientversion.getWeb3ClientVersion());
-
+		mainWindowController.timer.cancel();
 	}
 }

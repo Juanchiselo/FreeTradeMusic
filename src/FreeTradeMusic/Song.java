@@ -11,8 +11,10 @@ public class Song
     private int year;
     private int durationInSeconds;
     private final SimpleStringProperty duration;
+    private String url;
 
-    public Song(String title, String artist, String album, String genre, int year, int duration)
+    public Song(String title, String artist, String album, String genre,
+                int year, int duration, String url)
     {
         this.title = new SimpleStringProperty(title);
         this.artist = new SimpleStringProperty(artist);
@@ -21,6 +23,7 @@ public class Song
         this.year = year;
         this.durationInSeconds = duration;
         this.duration = new SimpleStringProperty(convertDuration(duration));
+        this.url = url;
     }
 
     public String getTitle()
@@ -93,5 +96,15 @@ public class Song
     {
         return String.valueOf(duration / 60)
                 + ":" + String.valueOf(duration % 60);
+    }
+
+    public void setUrl(String url)
+    {
+        this.url = url;
+    }
+
+    public String getUrl()
+    {
+        return url;
     }
 }

@@ -199,7 +199,8 @@ public class Controller
                 passwordLPasswordField.clear();
                 scene = FreeTradeMusic.mainWindow;
                 resizable = true;
-                maximized = true;
+                //maximized = true;
+                MusicPlayer.getInstance();
                 break;
         }
 
