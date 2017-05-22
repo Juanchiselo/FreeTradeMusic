@@ -28,7 +28,7 @@ public class Blockchain extends Thread
             Web3ClientVersion clientversion = web3.web3ClientVersion().sendAsync().get();
             System.out.println("Client is running version: " + clientversion.getWeb3ClientVersion());
 
-            Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile");
+            Credentials credentials = WalletUtils.loadCredentials("password", "/path/to/walletfile"); //Password and source need to be changed
 
             //This is used to create and deploy smart contract
             /*YourSmartContract contract = YourSmartContract.deploy(
