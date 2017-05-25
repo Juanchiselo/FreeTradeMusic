@@ -6,6 +6,8 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
 
+import java.io.IOException;
+
 import static org.web3j.tx.ManagedTransaction.GAS_PRICE;
 import static org.web3j.tx.Transfer.GAS_LIMIT;
 
@@ -21,6 +23,10 @@ public class Blockchain extends Thread
 
     public void start()
     {
+        //starting geth with command line
+        Runtime rt = Runtime.getRuntime();
+        try{Process pr = rt.exec("geth --rpcapi personal,db,eth,net,web3 --rpc --testnet");}
+        catch(IOException e) {System.out.println("Command Line Error");}
         try
         {
             System.out.println("Blockchain thread launched!");

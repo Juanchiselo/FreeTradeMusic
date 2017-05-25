@@ -54,16 +54,24 @@ public class DatabaseManager
                 + "WHERE User = " + "'" + username + "'";
         String pwTest = "SELECT * "
                 + "FROM Users "
-                + "WHERE Password = " + "'" + password + "'";
+                + "WHERE User = " + "'" + username + "'"
+                + "AND Password = " + "'" + password + "'";
+
         try {
             if(!queryDatabase(userTest).absolute(1)){return Error.USERNAME_WRONG;}
             else if(!queryDatabase(pwTest).absolute(1)){return Error.PASSWORD_WRONG;}
             else{
+                ResultSet rs = queryDatabase(pwTest);
                 // TODO: Create a user object with the data you got from the database.
-                FreeTradeMusic.user = new User("User", "Pass", "fake@outlook.com",
-                        "User", "Name");
+                while(rs.next()) {
+                    FreeTradeMusic.user = new User(rs.getString(1), rs.getString(2),
+                            rs.getString(3), rs.getString(4), rs.getString(5));
+                }
+                //FreeTradeMusic.user = new User("User", "Pass", "fake@outlook.com",
+                //        "User", "Name");
                 return Error.NO_ERROR;}
         } catch (SQLException e) {
+            System.out.println("Dbm");
             return Error.DATABASE_ERROR;
         }
     }
@@ -124,21 +132,28 @@ public class DatabaseManager
         return songs;
     }
 
-    public Error submitSong(String title, String artist, String album, String genre, int year, int duration, File file)
+    public Error submitSong(String title, String artist, String album, String genre,
+                            int year, int duration, File file)
     {
-        String url;
+        varSQL = "INSERT INTO Music (Title,Artist,Album,Year,Genre,Duration)" +
+                "Values('" + title + "'," + "'" + artist +
+                "'," + "'" + album + "'," + "'" + year +
+                "'," + "'" + genre + "'," + "'" + duration + "'" +
+                "'," + "'" + file.getName() + ")";
 
         // TODO: Upload actual file to Amazon server and get the url.
-        url = uploadFile(file);
+        AmazonClass.getInstance().upload(file.getPath(),file.getName());
 
         // TODO: INSERT song information into database including url but not the file and return error code.
+        try{stmt.executeUpdate(varSQL);}catch(SQLException e){return Error.DATABASE_ERROR;}
         return Error.NO_ERROR;
     }
-
+    /* Didn't use
     private String uploadFile(File file)
     {
         String url = "";
 
         return url;
     }
+    */
 }
