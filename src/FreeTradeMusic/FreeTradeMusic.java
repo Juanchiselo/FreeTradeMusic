@@ -58,5 +58,6 @@ public class FreeTradeMusic extends Application
 	    //new Blockchain().start();
 		launch(args);
 		mainWindowController.timer.cancel();
+		DatabaseManager.getInstance().close();
 	}
 }
