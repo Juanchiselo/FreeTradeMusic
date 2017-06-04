@@ -41,6 +41,13 @@ public class DatabaseManager
         return instance;
     }
 
+    public void close(){
+        try{
+            stmt.close();
+            conn.close();
+        }catch(SQLException e){System.out.println("DB Error on close.");}
+    }
+
     private ResultSet queryDatabase(String query){
         try{return stmt.executeQuery(query);}
         catch(SQLException e){System.out.println("ERROR: " + e.getMessage());}
@@ -92,7 +99,7 @@ public class DatabaseManager
                 + "FROM Users "
                 + "WHERE User = " + "'" + username.toLowerCase() + "'";
         try {
-            if(!queryDatabase(varSQL).absolute(1)){return Error.USERNAME_NOT_AVAILABLE;}
+            if(queryDatabase(varSQL).absolute(1)){return Error.USERNAME_NOT_AVAILABLE;}
             else{return Error.NO_ERROR;}
         } catch (SQLException e) {
             return Error.DATABASE_ERROR;
