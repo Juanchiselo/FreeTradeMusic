@@ -99,7 +99,7 @@ public class DatabaseManager
                 + "FROM Users "
                 + "WHERE User = " + "'" + username.toLowerCase() + "'";
         try {
-            if(queryDatabase(varSQL).absolute(1)){System.out.println("in the error");return Error.USERNAME_NOT_AVAILABLE;}
+            if(queryDatabase(varSQL).absolute(1)){return Error.USERNAME_NOT_AVAILABLE;}
             else{return Error.NO_ERROR;}
         } catch (SQLException e) {
             return Error.DATABASE_ERROR;
