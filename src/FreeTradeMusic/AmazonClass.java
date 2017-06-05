@@ -41,9 +41,8 @@ public class AmazonClass {
         s3Client.getObject(new GetObjectRequest(bucketName, key), new File(path));
     }
 
-    public void upload(String path, String fileName){
-        System.out.println("Upload Method");
-        s3Client.putObject(new PutObjectRequest(bucketName,fileName,path));
+    public void upload(File file){
+        s3Client.putObject(new PutObjectRequest(bucketName,file.getName(),file));
     }
 
 }
