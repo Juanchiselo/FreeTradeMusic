@@ -13,8 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import javafx.util.Duration;
 import org.apache.tika.metadata.Metadata;
 
 import java.io.File;
@@ -54,8 +54,6 @@ public class MainWindowController
     @FXML private Tab walletTab;
     @FXML private Tab submitSongTab;
     @FXML private Tab editProfileTab;
-
-    @FXML private TabPane userTabPane;
     @FXML private Tab musicLibraryTab;
 
     @FXML private ContextMenu songsContextMenu;
@@ -85,6 +83,9 @@ public class MainWindowController
     @FXML private TextField yearTextField;
     @FXML private Button submitSongButton;
 
+    @FXML private ImageView profileImageView;
+    @FXML private Circle profileImage;
+
     File file;
     List<File> files;
     FileChooser fileChooser = new FileChooser();
@@ -102,6 +103,9 @@ public class MainWindowController
         textFields.add(albumTextField);
         textFields.add(genreTextField);
         textFields.add(yearTextField);
+
+        Circle maskCircle = new Circle(75, 75, 70);
+        profileImageView.setClip(maskCircle);
 
 
         songs = DatabaseManager.getInstance().getSongs();
@@ -203,40 +207,11 @@ public class MainWindowController
 //                }
 //            }
 //        });
-//
-//        MusicPlayer.getInstance().mediaPlayer.currentTimeProperty()
-//                .addListener(new ChangeListener()
-//                {
-//
-//            @Override
-//            public void changed(ObservableValue observable, Duration oldValue, Duration newValue)
-//            {
-//                updateValues();
-//            }
-//        });
 
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("MP3", "*.mp3")
         );
     }
-
-
-    protected void updateValues()
-    {
-        if (timeSlider != null)
-        {
-            Platform.runLater(() -> {
-                Duration currentTime = MusicPlayer.getInstance().mediaPlayer.getCurrentTime();
-                currentTimeLabel.setText(currentTime.toString());
-//                    //timeSlider.setDisable(duration.isUnknown());
-//                    if (!timeSlider.isDisabled() && duration.greaterThan(Duration.ZERO) && !timeSlider.isValueChanging()) {
-//                        slider.setValue(currentTime.divide(duration).toMillis() * 100.0);
-//                    }
-
-            });
-        }
-    }
-
 
     public void attachFilter(TableView<Song> tableView, ObservableList<Song> songs)
     {
@@ -316,7 +291,7 @@ public class MainWindowController
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK)
         {
-            MusicPlayer.getInstance().stopSong();
+                MusicPlayer.getInstance().stopSong();
             FreeTradeMusic.stage.setScene(FreeTradeMusic.loginScene);
             FreeTradeMusic.stage.setResizable(false);
         }
@@ -344,12 +319,17 @@ public class MainWindowController
 
     public void onGoToMusicLibrary()
     {
-        userTabPane.getSelectionModel().select(musicLibraryTab);
+        mainWindowTabPane.getSelectionModel().select(musicLibraryTab);
     }
 
     public void onGoToSubmitSong()
     {
         mainWindowTabPane.getSelectionModel().select(submitSongTab);
+    }
+
+    public void onGoToEditProfile()
+    {
+        mainWindowTabPane.getSelectionModel().select(editProfileTab);
     }
 
     public void onAddFavoriteArtist()

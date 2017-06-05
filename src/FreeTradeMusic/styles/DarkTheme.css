@@ -96,14 +96,6 @@
     -fx-background-size: cover;
 }
 
-.playButton {
-    -fx-graphic: url("./drawables/Music Player Buttons/play.png");
-}
-
-.playButton:hover {
-    -fx-graphic: url("./drawables/Music Player Buttons/pause.png");
-}
-
 .split-pane{
     -fx-background-color: black;
 }
@@ -134,7 +126,44 @@
     -fx-font-family: "Segoe UI Semibold";
 }
 
+#profileName{
+    -fx-font-size: 28pt;
+    -fx-opacity: 1;
+}
 
+#profileLocation{
+    -fx-font-size: 20pt;
+    -fx-opacity: 1;
+}
+
+.profileMusic{
+    -fx-font-size: 14pt;
+    -fx-opacity: 1;
+}
+
+#playButton {
+    -fx-image: url("../drawables/MediaPlayerButtons/play.png");
+}
+
+#playButton:hover {
+    -fx-image: url("../drawables/MediaPlayerButtons/playHover.png");
+}
+
+#backButton {
+    -fx-image: url("../drawables/MediaPlayerButtons/back.png");
+}
+
+#backButton:hover {
+    -fx-image: url("../drawables/MediaPlayerButtons/backHover.png");
+}
+
+#nextButton {
+    -fx-image: url("../drawables/MediaPlayerButtons/next.png");
+}
+
+#nextButton:hover {
+    -fx-image: url("../drawables/MediaPlayerButtons/nextHover.png");
+}
 
 /*
  * Metro style Push Button
