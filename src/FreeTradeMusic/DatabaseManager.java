@@ -173,7 +173,7 @@ public class DatabaseManager
                 "'," + "'" + file.getName() + ")";
 
         // TODO: Upload actual file to Amazon server and get the url.
-        AmazonClass.getInstance().upload(file.getPath(),file.getName());
+        AmazonClass.getInstance().upload(file);
 
         // TODO: INSERT song information into database including url but not the file and return error code.
         try{stmt.executeUpdate(varSQL);}catch(SQLException e){return Error.DATABASE_ERROR;}
