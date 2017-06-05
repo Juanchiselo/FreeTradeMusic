@@ -139,6 +139,29 @@ public class DatabaseManager
         return songs;
     }
 
+    public ObservableList<Song> getUserSongs(String user)
+    {
+        ObservableList<Song> songs = FXCollections.observableArrayList();
+
+        varSQL = "SELECT m.Title,m.Artist,m.Album,m.Genre,m.Year,m.Duration "
+                + "FROM Music m, Owned o"
+                + "WHERE m.id = o.id"
+                + "AND o.User = " + user ;
+        try{
+            ResultSet rs = stmt.executeQuery(varSQL);
+            while (rs.next()) {
+                songs.add(new Song(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        null));
+            }
+        }catch(SQLException e){}
+        return songs;
+    }
+
     public Error submitSong(String title, String artist, String album, String genre,
                             int year, int duration, File file)
     {
