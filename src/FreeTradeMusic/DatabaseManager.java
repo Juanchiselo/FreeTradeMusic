@@ -166,17 +166,19 @@ public class DatabaseManager
     public Error submitSong(String title, String artist, String album, String genre,
                             int year, int duration, File file)
     {
-        varSQL = "INSERT INTO Music (Title,Artist,Album,Year,Genre,Duration)" +
+        varSQL = "INSERT INTO Music (Title,Artist,Album,Year,Genre,Duration,FileName)" +
                 "Values('" + title + "'," + "'" + artist +
                 "'," + "'" + album + "'," + "'" + year +
-                "'," + "'" + genre + "'," + "'" + duration + "'" +
-                "'," + "'" + file.getName() + ")";
+                "','"  + genre + "'," + duration +
+                ",'" + file.getName() + "')";
 
         // TODO: Upload actual file to Amazon server and get the url.
         AmazonClass.getInstance().upload(file);
 
         // TODO: INSERT song information into database including url but not the file and return error code.
-        try{stmt.executeUpdate(varSQL);}catch(SQLException e){return Error.DATABASE_ERROR;}
+        try{stmt.executeUpdate(varSQL);}
+        catch(SQLException e){return Error.DATABASE_ERROR;}
+
         return Error.NO_ERROR;
     }
     /* Didn't use
