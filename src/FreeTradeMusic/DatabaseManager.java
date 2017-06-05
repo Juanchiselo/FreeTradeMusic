@@ -72,7 +72,8 @@ public class DatabaseManager
                 // TODO: Create a user object with the data you got from the database.
                 while(rs.next()) {
                     FreeTradeMusic.user = new User(rs.getString(1), rs.getString(2),
-                            rs.getString(3), rs.getString(4), rs.getString(5));
+                            rs.getString(3), rs.getString(4), rs.getString(5),
+                            0, 0);
                 }
                 //FreeTradeMusic.user = new User("User", "Pass", "fake@outlook.com",
                 //        "User", "Name");
