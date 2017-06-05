@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
@@ -76,7 +77,6 @@
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -85,7 +85,6 @@
                                     <Label onMousePressed="#onGoToMusicLibrary" styleClass="labelMenuButton" text="Music Library" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Label onMousePressed="#onGoToSubmitSong" styleClass="labelMenuButton" text="Submit Music" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Label onMousePressed="#onGoToWallet" styleClass="labelMenuButton" text="Wallet" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                    <Label onMousePressed="#onGoToEditProfile" styleClass="labelMenuButton" text="Edit Profile" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                  </children>
                               </GridPane>
                            </children>
@@ -172,7 +171,7 @@
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" percentHeight="5.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" percentHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -207,6 +206,7 @@
                                  <children>
                                     <Button fx:id="followButton" mnemonicParsing="false" text="Favorite" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Button fx:id="seeMusicButton" mnemonicParsing="false" text="See Music" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <Button fx:id="updateProfileButton" mnemonicParsing="false" onAction="#onUpdateProfile" text="Update Profile" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                  </children>
                               </GridPane>
                               <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
@@ -224,6 +224,10 @@
                                     <Label fx:id="artistSongsLabel" styleClass="profileMusic" text="53 Songs" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                  </children>
                               </GridPane>
+                              <Label fx:id="editProfileButton" onMousePressed="#onEditProfile" styleClass="labelMenuButton" text="Edit Profile" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                              <TextField fx:id="artistUsernameTextField" maxHeight="35.0" maxWidth="200.0" minHeight="35.0" minWidth="200.0" prefHeight="35.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                              <TextField fx:id="artistLocationTextField" maxHeight="35.0" maxWidth="200.0" minHeight="35.0" minWidth="200.0" prefHeight="35.0" prefWidth="200.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                              <TextArea fx:id="artistDescriptionTextArea" maxHeight="120.0" maxWidth="500.0" minHeight="120.0" minWidth="500.0" prefHeight="120.0" prefWidth="500.0" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
                            </children>
                         </GridPane>
                      </content>
@@ -301,7 +305,6 @@
                         </GridPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="editProfileTab" closable="false" text="Edit Profile" />
                   <Tab fx:id="submitSongTab" closable="false" text="Submit Song">
                      <content>
                         <GridPane>

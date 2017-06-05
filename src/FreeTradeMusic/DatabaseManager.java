@@ -1,5 +1,6 @@
 package FreeTradeMusic;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -172,10 +173,12 @@ public class DatabaseManager
                 "','"  + genre + "'," + duration +
                 ",'" + file.getName() + "')";
 
-        // TODO: Upload actual file to Amazon server and get the url.
-        AmazonClass.getInstance().upload(file);
+        Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
+                "Uploading \"" + title + "\" to the database."));
+        new Thread(() -> AmazonClass.getInstance().upload(file)).start();
+        Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
+                "Finished uploading \"" + title + "\" to the database."));
 
-        // TODO: INSERT song information into database including url but not the file and return error code.
         try{stmt.executeUpdate(varSQL);}
         catch(SQLException e){return Error.DATABASE_ERROR;}
 
@@ -189,4 +192,34 @@ public class DatabaseManager
         return url;
     }
     */
+
+    public User getProfile(String username)
+    {
+        User artist = null;
+
+        String query = "SELECT * "
+                + "FROM Users "
+                + "WHERE User = " + "'" + username + "'";
+
+        try {
+            if(!queryDatabase(query).absolute(1)){return null;}
+            else{
+                ResultSet rs = queryDatabase(query);
+                while(rs.next()) {
+                    artist = new User(rs.getString(1), rs.getString(2),
+                            rs.getString(3), rs.getString(4), rs.getString(5),
+                            0, 0);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Dbm");
+        }
+
+        return artist;
+    }
+
+    public Error updateProfile(String username, String location, String description)
+    {
+        return Error.NO_ERROR;
+    }
 }

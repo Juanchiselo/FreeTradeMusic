@@ -99,6 +99,19 @@ public class MainWindowController
 
     private Metadata metadata;
 
+    @FXML private Label artistNameLabel;
+    @FXML private Label artistLocationLabel;
+    @FXML private Label artistDescriptionLabel;
+    @FXML private Label artistAlbumsLabel;
+    @FXML private Label artistSongsLabel;
+    @FXML private Label editProfileButton;
+    @FXML private TextField artistUsernameTextField;
+    @FXML private TextField artistLocationTextField;
+    @FXML private TextArea artistDescriptionTextArea;
+    @FXML private Button followButton;
+    @FXML private Button seeMusicButton;
+    @FXML private Button updateProfileButton;
+
     public void initialize()
     {
         textFields.add(titleTextField);
@@ -276,7 +289,7 @@ public class MainWindowController
 
     private void updateStoreTable()
     {
-        //songs = DatabaseManager.getInstance().getSongs();
+        songs = DatabaseManager.getInstance().getSongs();
         attachFilter(storeTableView, songs);
         storeTableView.refresh();
     }
@@ -312,6 +325,12 @@ public class MainWindowController
 
     public void onGoToProfile()
     {
+        artistNameLabel.setText(FreeTradeMusic.user.getUsername());
+        artistLocationLabel.setText(FreeTradeMusic.user.getLocation());
+        artistAlbumsLabel.setText(String.valueOf(FreeTradeMusic.user.getUploadedAlbums()) + " Albums");
+        artistSongsLabel.setText(String.valueOf(FreeTradeMusic.user.getUploadedSongs()) + " Songs");
+        artistDescriptionLabel.setText(FreeTradeMusic.user.getDescription());
+        editProfileButton.setVisible(true);
         mainWindowTabPane.getSelectionModel().select(profileTab);
     }
 
@@ -330,9 +349,21 @@ public class MainWindowController
         mainWindowTabPane.getSelectionModel().select(submitSongTab);
     }
 
-    public void onGoToEditProfile()
+    public void onEditProfile()
     {
-        mainWindowTabPane.getSelectionModel().select(editProfileTab);
+        editProfileButton.setDisable(true);
+        artistNameLabel.setVisible(false);
+        artistLocationLabel.setVisible(false);
+        artistDescriptionLabel.setVisible(false);
+        artistUsernameTextField.setVisible(true);
+        artistLocationTextField.setVisible(true);
+        artistDescriptionTextArea.setVisible(true);
+        followButton.setVisible(false);
+        seeMusicButton.setVisible(false);
+        artistUsernameTextField.setText(FreeTradeMusic.user.getUsername());
+        artistLocationTextField.setText(FreeTradeMusic.user.getLocation());
+        artistDescriptionTextArea.setText(FreeTradeMusic.user.getDescription());
+        updateProfileButton.setVisible(true);
     }
 
     public void onAddFavoriteArtist()
@@ -386,9 +417,6 @@ public class MainWindowController
 
             if(errors.get(0) == Error.NO_ERROR)
             {
-                // TODO: Delete this just update the table.
-                songs.add(new Song(title, FreeTradeMusic.user.getUsername(), album,
-                        genre, year, duration, file.getAbsolutePath()));
                 updateStoreTable();
 
                 alertUser("Song has been submitted successfully",
@@ -507,13 +535,57 @@ public class MainWindowController
 
     public void onViewArtistProfile()
     {
-        //User user = DatabaseManager.getInstance().getProfile();
-        mainWindowTabPane.getSelectionModel().select(profileTab);
+        Song song = storeTableView.getSelectionModel().getSelectedItem();
+        User artist = null;
+
+        if(song != null)
+            artist = DatabaseManager.getInstance().getProfile(song.getArtist());
+
+        if(artist != null)
+        {
+            artistNameLabel.setText(artist.getUsername());
+            artistLocationLabel.setText(artist.getLocation());
+            artistAlbumsLabel.setText(String.valueOf(artist.getUploadedAlbums()) + " Albums");
+            artistSongsLabel.setText(String.valueOf(artist.getUploadedSongs()) + " Songs");
+            artistDescriptionLabel.setText(artist.getDescription());
+            mainWindowTabPane.getSelectionModel().select(profileTab);
+        }
     }
 
     public void onBuySong()
     {
 
+    }
+
+    public void onUpdateProfile()
+    {
+        String username = artistUsernameTextField.getText();
+        String location = artistLocationTextField.getText();
+        String description = artistDescriptionTextArea.getText();
+
+        error = DatabaseManager.getInstance().updateProfile(username, location, description);
+
+        if(error == Error.NO_ERROR)
+        {
+            FreeTradeMusic.user.setUsername(username);
+            FreeTradeMusic.user.setLocation(location);
+            FreeTradeMusic.user.setDescription(description);
+
+            editProfileButton.setDisable(false);
+            artistNameLabel.setVisible(true);
+            artistLocationLabel.setVisible(true);
+            artistDescriptionLabel.setVisible(true);
+            artistUsernameTextField.setVisible(false);
+            artistLocationTextField.setVisible(false);
+            artistDescriptionTextArea.setVisible(false);
+            followButton.setVisible(true);
+            seeMusicButton.setVisible(true);
+            artistUsernameTextField.clear();
+            artistLocationTextField.clear();
+            artistDescriptionTextArea.clear();
+            updateProfileButton.setVisible(false);
+            onGoToProfile();
+        }
     }
 
     /**
