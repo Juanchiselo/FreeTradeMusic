@@ -2,24 +2,31 @@ package FreeTradeMusic;
 
 import java.io.File;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.Region;
+
+import static com.amazonaws.services.s3.model.Region.US_West_2;
 
 public class AmazonClass {
 
     private static AmazonClass instance = null;
     private AWSCredentials creds;
-    private AmazonS3Client s3Client;
+    private AmazonS3 s3Client;
     private String bucketName = "freetrademusic";
     private String key;
+    private String accessKey = "AKIAJY4ZIQ2AGUBWE45Q";
+    private String secretKey= "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";
+
     private AmazonClass(){
-        creds = new BasicAWSCredentials("bossman","cs480ftm");
-        s3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard().
-                withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+        creds = new BasicAWSCredentials(accessKey,secretKey);
+        s3Client = AmazonS3ClientBuilder.standard().
+                withCredentials(new AWSStaticCredentialsProvider(creds)).
+                withRegion(String.valueOf(Region.US_West)).build();
     }
 
     public static AmazonClass getInstance(){
@@ -35,6 +42,7 @@ public class AmazonClass {
     }
 
     public void upload(String path, String fileName){
+        System.out.println("Upload Method");
         s3Client.putObject(new PutObjectRequest(bucketName,fileName,path));
     }
 
