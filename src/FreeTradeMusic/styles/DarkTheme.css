@@ -142,27 +142,44 @@
 }
 
 #playButton {
-    -fx-image: url("../drawables/MediaPlayerButtons/play.png");
+    -fx-image: url("../drawables/MediaPlayerButtons/Play.png");
 }
 
 #playButton:hover {
-    -fx-image: url("../drawables/MediaPlayerButtons/playHover.png");
+    -fx-image: url("../drawables/MediaPlayerButtons/PlayHover.png");
 }
 
+#pauseButton {
+    -fx-image: url("../drawables/MediaPlayerButtons/Pause.png");
+}
+
+#pauseButton:hover {
+    -fx-image: url("../drawables/MediaPlayerButtons/PauseHover.png");
+}
+
+
 #backButton {
-    -fx-image: url("../drawables/MediaPlayerButtons/back.png");
+    -fx-image: url("../drawables/MediaPlayerButtons/Back.png");
 }
 
 #backButton:hover {
-    -fx-image: url("../drawables/MediaPlayerButtons/backHover.png");
+    -fx-image: url("../drawables/MediaPlayerButtons/BackHover.png");
 }
 
 #nextButton {
-    -fx-image: url("../drawables/MediaPlayerButtons/next.png");
+    -fx-image: url("../drawables/MediaPlayerButtons/Next.png");
 }
 
 #nextButton:hover {
-    -fx-image: url("../drawables/MediaPlayerButtons/nextHover.png");
+    -fx-image: url("../drawables/MediaPlayerButtons/NextHover.png");
+}
+
+#shuffleButton {
+     -fx-image: url("../drawables/MediaPlayerButtons/shuffle.png");
+}
+
+#shuffleButton:selected {
+     -fx-image: url("../drawables/MediaPlayerButtons/shuffleSelected.png");
 }
 
 /*

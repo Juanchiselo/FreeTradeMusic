@@ -11,25 +11,27 @@ public class User
     private String username;
     private String password;
     private String email;
-    private String firstName;
-    private String lastName;
+    private String location;
+    private String description;
+    private int uploadedAlbums;
+    private int uploadedSongs;
     private ObservableList<Song> ownedSongs;
     private ArrayList<String> favoriteArtists;
 
     public User(String username, String password,
-                String email, String firstName,
-                String lastName)
+                String email, String location,
+                String description, int uploadedAlbums,
+                int uploadedSongs)
     {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.location = location;
+        this.description = description;
+        this.uploadedAlbums = uploadedAlbums;
+        this.uploadedSongs = uploadedSongs;
         favoriteArtists = new ArrayList<>();
         ownedSongs = FXCollections.observableArrayList();
-//        ownedSongs.add(new Song("Something About Us", "Daft Punk", "Discovery", "Dance",
-//                2001, 229));
-
         FreeTradeMusic.mainWindowController.updateSongsTable("USER", ownedSongs);
     }
 
@@ -63,30 +65,43 @@ public class User
         this.email = email;
     }
 
-    public String getFirstName()
-    {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName)
-    {
-        this.firstName = firstName;
-    }
-
-    public String getLastName()
-    {
-        return lastName;
-    }
-
-    public void setLastName(String lastName)
-    {
-        this.lastName = lastName;
-    }
-
     public ArrayList<String> getFavoriteArtists()
     {
         return favoriteArtists;
     }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getUploadedAlbums() {
+        return uploadedAlbums;
+    }
+
+    public void setUploadedAlbums(int uploadedAlbums) {
+        this.uploadedAlbums = uploadedAlbums;
+    }
+
+    public int getUploadedSongs() {
+        return uploadedSongs;
+    }
+
+    public void setUploadedSongs(int uploadedSongs) {
+        this.uploadedSongs = uploadedSongs;
+    }
+
 
     public void setFavoriteArtists(ArrayList<String> favoriteArtists)
     {

@@ -9,6 +9,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -70,6 +71,7 @@ public class MainWindowController
     @FXML private ImageView shuffleButton;
     @FXML private GridPane musicPlayerGridPane;
     public Timer timer = new Timer();
+    private Image selectedShuffleButton;
 
     @FXML private Label titleLabel;
     @FXML private Label artistLabel;
@@ -291,6 +293,7 @@ public class MainWindowController
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK)
         {
+            if(MusicPlayer.getInstance().isSongPlaying())
                 MusicPlayer.getInstance().stopSong();
             FreeTradeMusic.stage.setScene(FreeTradeMusic.loginScene);
             FreeTradeMusic.stage.setResizable(false);
@@ -368,7 +371,10 @@ public class MainWindowController
         String yearString = yearTextField.getText().trim();
 
         if(album.isEmpty())
+        {
+            album = "Single Release";
             albumTextField.setText("Single Release");
+        }
 
         if(!title.isEmpty() && !genre.isEmpty() && !yearString.isEmpty() && file != null)
         {
@@ -437,9 +443,13 @@ public class MainWindowController
 
     public void onPlay()
     {
-        MusicPlayer.getInstance().playSong();
-        playButton.setVisible(false);
-        pauseButton.setVisible(true);
+        if(!MusicPlayer.getInstance().isSongPlaying()
+                && !MusicPlayer.getInstance().isPlaylistEmpty())
+        {
+            MusicPlayer.getInstance().playSong();
+            playButton.setVisible(false);
+            pauseButton.setVisible(true);
+        }
     }
 
     public void onPause()
@@ -457,6 +467,11 @@ public class MainWindowController
     public void onPrevious()
     {
         MusicPlayer.getInstance().previousSong();
+    }
+
+    public void onShuffle()
+    {
+        MusicPlayer.getInstance().shufflePlaylist(true);
     }
 
     public void updateMusicPlayer(String title, String artist,
@@ -478,11 +493,27 @@ public class MainWindowController
         }, 0, 1000);
     }
 
+    public void disableMusicPlayer(boolean disable)
+    {
+        musicPlayerGridPane.setVisible(!disable);
+    }
+
     private void clearSubmissionForm()
     {
         for(TextField textField : textFields)
             textField.clear();
         submitSongButton.setDisable(true);
+    }
+
+    public void onViewArtistProfile()
+    {
+        //User user = DatabaseManager.getInstance().getProfile();
+        mainWindowTabPane.getSelectionModel().select(profileTab);
+    }
+
+    public void onBuySong()
+    {
+
     }
 
     /**
