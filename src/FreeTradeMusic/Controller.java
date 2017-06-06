@@ -59,6 +59,8 @@ public class Controller
             if(error == Error.NO_ERROR)
             {
                 hasErrors = false;
+                FreeTradeMusic.mainWindowController.updateSongsTable("USER",
+                        DatabaseManager.getInstance().getUserSongs(FreeTradeMusic.user.getUsername()));
                 switchScene("MAIN_WINDOW");
             }
         }
