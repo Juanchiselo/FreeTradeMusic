@@ -230,4 +230,17 @@ public class DatabaseManager
     {
         return Error.NO_ERROR;
     }
+
+    public Error boughtSong(Song song)
+    {
+        return Error.NO_ERROR;
+    }
+
+    public void downloadSong(Song song)
+    {
+        String currentDirectory = System.getProperty("user.dir");
+        Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
+                "Downloading \"" + song.getTitle() + "\" to the database."));
+        new Thread(() -> AmazonClass.getInstance().download(currentDirectory , song.getTitle(), song)).start();
+    }
 }

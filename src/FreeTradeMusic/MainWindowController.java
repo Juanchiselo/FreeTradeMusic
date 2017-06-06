@@ -52,26 +52,23 @@ public class MainWindowController
     @FXML private Tab homeTab;
     @FXML private Tab storeTab;
     @FXML private Tab profileTab;
-    @FXML private Tab walletTab;
-    @FXML private Tab submitSongTab;
-    @FXML private Tab editProfileTab;
+
+    @FXML private TabPane homeTabPane;
     @FXML private Tab musicLibraryTab;
+    @FXML private Tab submitSongTab;
+    @FXML private Tab walletTab;
+
 
     @FXML private ContextMenu songsContextMenu;
 
     @FXML private Label statusLabel;
 
     @FXML private ImageView backButton;
-    @FXML private ImageView rewindButton;
     @FXML private ImageView playButton;
     @FXML private ImageView pauseButton;
-    @FXML private ImageView forwardButton;
     @FXML private ImageView nextButton;
-    @FXML private ImageView repeatButton;
-    @FXML private ImageView shuffleButton;
     @FXML private GridPane musicPlayerGridPane;
     public Timer timer = new Timer();
-    private Image selectedShuffleButton;
 
     @FXML private Label titleLabel;
     @FXML private Label artistLabel;
@@ -313,9 +310,11 @@ public class MainWindowController
         }
     }
 
+    /**NAVIGATION HANDLERS**/
     public void onGoToHome()
     {
         mainWindowTabPane.getSelectionModel().select(homeTab);
+        homeTabPane.getSelectionModel().select(musicLibraryTab);
     }
 
     public void onGoToStore()
@@ -336,34 +335,23 @@ public class MainWindowController
 
     public void onGoToWallet()
     {
-        mainWindowTabPane.getSelectionModel().select(walletTab);
+        homeTabPane.getSelectionModel().select(walletTab);
     }
 
     public void onGoToMusicLibrary()
     {
-        mainWindowTabPane.getSelectionModel().select(musicLibraryTab);
+        homeTabPane.getSelectionModel().select(musicLibraryTab);
     }
 
     public void onGoToSubmitSong()
     {
-        mainWindowTabPane.getSelectionModel().select(submitSongTab);
+        homeTabPane.getSelectionModel().select(submitSongTab);
     }
+
 
     public void onEditProfile()
     {
-        editProfileButton.setDisable(true);
-        artistNameLabel.setVisible(false);
-        artistLocationLabel.setVisible(false);
-        artistDescriptionLabel.setVisible(false);
-        artistUsernameTextField.setVisible(true);
-        artistLocationTextField.setVisible(true);
-        artistDescriptionTextArea.setVisible(true);
-        followButton.setVisible(false);
-        seeMusicButton.setVisible(false);
-        artistUsernameTextField.setText(FreeTradeMusic.user.getUsername());
-        artistLocationTextField.setText(FreeTradeMusic.user.getLocation());
-        artistDescriptionTextArea.setText(FreeTradeMusic.user.getDescription());
-        updateProfileButton.setVisible(true);
+        enableUpdateProfileComponents(true);
     }
 
     public void onAddFavoriteArtist()
@@ -418,6 +406,8 @@ public class MainWindowController
             if(errors.get(0) == Error.NO_ERROR)
             {
                 updateStoreTable();
+                updateSongsTable("USER", DatabaseManager.getInstance().getUserSongs(
+                        FreeTradeMusic.user.getUsername()));
 
                 alertUser("Song has been submitted successfully",
                         "Your song has been submitted successfully.",
@@ -465,8 +455,7 @@ public class MainWindowController
     public void onAddSongToPlaylist()
     {
         Song song = storeTableView.getSelectionModel().getSelectedItem();
-        MusicPlayer.getInstance().addToPlaylist(song);
-        musicPlayerGridPane.setDisable(false);
+        DatabaseManager.getInstance().downloadSong(song);
     }
 
     public void onPlay()
@@ -535,6 +524,7 @@ public class MainWindowController
 
     public void onViewArtistProfile()
     {
+        enableUpdateProfileComponents(false);
         Song song = storeTableView.getSelectionModel().getSelectedItem();
         User artist = null;
 
@@ -543,6 +533,10 @@ public class MainWindowController
 
         if(artist != null)
         {
+            if(artist.getUsername().equals(FreeTradeMusic.user.getUsername()))
+                editProfileButton.setVisible(true);
+            else
+                editProfileButton.setVisible(false);
             artistNameLabel.setText(artist.getUsername());
             artistLocationLabel.setText(artist.getLocation());
             artistAlbumsLabel.setText(String.valueOf(artist.getUploadedAlbums()) + " Albums");
@@ -552,9 +546,47 @@ public class MainWindowController
         }
     }
 
+    public void enableUpdateProfileComponents(boolean enable)
+    {
+        editProfileButton.setDisable(enable);
+        artistNameLabel.setVisible(!enable);
+        artistLocationLabel.setVisible(!enable);
+        artistDescriptionLabel.setVisible(!enable);
+        artistUsernameTextField.setVisible(enable);
+        artistLocationTextField.setVisible(enable);
+        artistDescriptionTextArea.setVisible(enable);
+        followButton.setVisible(!enable);
+        seeMusicButton.setVisible(!enable);
+        artistUsernameTextField.setText(FreeTradeMusic.user.getUsername());
+        artistLocationTextField.setText(FreeTradeMusic.user.getLocation());
+        artistDescriptionTextArea.setText(FreeTradeMusic.user.getDescription());
+        updateProfileButton.setVisible(enable);
+    }
+
     public void onBuySong()
     {
-
+        Song song = storeTableView.getSelectionModel().getSelectedItem();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Buy Song");
+        alert.setHeaderText("Buy Song");
+        alert.setContentText("Are you sure you want to buy this song?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK)
+        {
+            error = DatabaseManager.getInstance().boughtSong(song);
+            if(error == Error.NO_ERROR)
+            {
+                updateSongsTable("USER", DatabaseManager.getInstance().getUserSongs(
+                        FreeTradeMusic.user.getUsername()));
+            }
+            else
+            {
+                alertUser("Error While Buying Song",
+                        "There was an error while buying your song." +
+                                " You have not been charged. Try again later.",
+                        "ERROR");
+            }
+        }
     }
 
     public void onUpdateProfile()
@@ -571,19 +603,7 @@ public class MainWindowController
             FreeTradeMusic.user.setLocation(location);
             FreeTradeMusic.user.setDescription(description);
 
-            editProfileButton.setDisable(false);
-            artistNameLabel.setVisible(true);
-            artistLocationLabel.setVisible(true);
-            artistDescriptionLabel.setVisible(true);
-            artistUsernameTextField.setVisible(false);
-            artistLocationTextField.setVisible(false);
-            artistDescriptionTextArea.setVisible(false);
-            followButton.setVisible(true);
-            seeMusicButton.setVisible(true);
-            artistUsernameTextField.clear();
-            artistLocationTextField.clear();
-            artistDescriptionTextArea.clear();
-            updateProfileButton.setVisible(false);
+            enableUpdateProfileComponents(false);
             onGoToProfile();
         }
     }

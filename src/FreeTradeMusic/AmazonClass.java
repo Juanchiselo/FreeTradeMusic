@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import javafx.application.Platform;
 
 public class AmazonClass {
 
@@ -25,9 +26,17 @@ public class AmazonClass {
         return instance;
     }
 
-    public void download(String path, String fileName){
+    public void download(String path, String fileName, Song song){
         key = fileName;
         s3Client.getObject(new GetObjectRequest(bucketName, key), new File(path));
+        song.setUrl(path);
+        MusicPlayer.getInstance().addToPlaylist(song);
+        Platform.runLater(() ->
+        {
+            FreeTradeMusic.mainWindowController.setStatus("STATUS",
+                    "Finished downloading \"" + song.getTitle() + "\".");
+            FreeTradeMusic.mainWindowController.disableMusicPlayer(false);
+        });
     }
 
     public void upload(File file){s3Client.putObject(new PutObjectRequest(bucketName,file.getName(),file));
