@@ -232,6 +232,10 @@ public class DatabaseManager
 
     public Error updateProfile(String username, String location, String description)
     {
+        varSQL = "UPDATE Users SET location = '" + location + "',description = '" +
+                description + "' " + "WHERE Users.user = '" + username + "'";
+        try { stmt.executeUpdate(varSQL); }
+        catch(SQLException e) { System.out.println("Wrong");/*(return Error.DATABASE_ERROR;*/ }
         return Error.NO_ERROR;
     }
 
