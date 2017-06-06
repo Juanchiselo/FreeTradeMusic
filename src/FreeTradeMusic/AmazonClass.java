@@ -27,6 +27,7 @@ public class AmazonClass {
     }
 
     public void download(String path, String fileName, Song song){
+        path += "/" + fileName;
         key = fileName;
         s3Client.getObject(new GetObjectRequest(bucketName, key), new File(path));
         song.setUrl(path);

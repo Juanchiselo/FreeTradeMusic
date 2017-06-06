@@ -145,11 +145,11 @@ public class DatabaseManager
     {
         ObservableList<Song> songs = FXCollections.observableArrayList();
 
-        varSQL = "SELECT m.Title,m.Artist,m.Album,m.Genre,m.Year,m.Duration "
-                + "FROM Music m, Owned o"
-                + "WHERE m.title = o.title"
-                + "AND m.artist = o.artist"
-                + "AND o.User = " + user ;
+        varSQL = "SELECT Owned.Title,Owned.Artist,Music.Album,Music.Genre,Music.Year,Music.Duration "
+                + "FROM Music, Owned "
+                + "WHERE Music.Title = Owned.Title"
+                + " AND Music.Artist = Owned.Artist"
+                + " AND Owned.User = '" + user + "'";
         try{
             ResultSet rs = stmt.executeQuery(varSQL);
             while (rs.next()) {
@@ -161,7 +161,7 @@ public class DatabaseManager
                         rs.getInt(6),
                         null));
             }
-        }catch(SQLException e){}
+        }catch(SQLException e){System.out.println("Wrong");}
         return songs;
     }
 
@@ -233,6 +233,13 @@ public class DatabaseManager
 
     public Error boughtSong(Song song)
     {
+        varSQL = "INSERT INTO Owned (User, Title, Artist)" +
+                "Values('" + FreeTradeMusic.user.getUsername() +
+                "','" + song.getTitle() + "','" + song.getArtist() +"')";
+
+        try{stmt.executeUpdate(varSQL);}
+        catch(SQLException e){return Error.DATABASE_ERROR;}
+
         return Error.NO_ERROR;
     }
 
@@ -241,6 +248,6 @@ public class DatabaseManager
         String currentDirectory = System.getProperty("user.dir");
         Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
                 "Downloading \"" + song.getTitle() + "\" to the database."));
-        new Thread(() -> AmazonClass.getInstance().download(currentDirectory , song.getTitle(), song)).start();
+        new Thread(() -> AmazonClass.getInstance().download(currentDirectory , song.getTitle() + ".mp3", song)).start();
     }
 }

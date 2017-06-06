@@ -138,8 +138,5 @@ public class User
                             "You already own " + song.getTitle() + " by " + song.getArtist() + "."));
     }
 
-    public ObservableList<Song> getOwnedSongs()
-    {
-        return ownedSongs;
-    }
+    public ObservableList<Song> getOwnedSongs() { return ownedSongs; }
 }
