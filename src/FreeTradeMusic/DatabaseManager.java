@@ -147,7 +147,8 @@ public class DatabaseManager
 
         varSQL = "SELECT m.Title,m.Artist,m.Album,m.Genre,m.Year,m.Duration "
                 + "FROM Music m, Owned o"
-                + "WHERE m.id = o.id"
+                + "WHERE m.title = o.title"
+                + "AND m.artist = o.artist"
                 + "AND o.User = " + user ;
         try{
             ResultSet rs = stmt.executeQuery(varSQL);
@@ -173,13 +174,20 @@ public class DatabaseManager
                 "','"  + genre + "'," + duration +
                 ",'" + file.getName() + "')";
 
+        String intoOwned = "INSERT INTO Owned (User, Title, Artist)" +
+                "Values('" + FreeTradeMusic.user.getUsername() +
+                "','" + title + "','" + artist +"')";
+
         Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
                 "Uploading \"" + title + "\" to the database."));
         new Thread(() -> AmazonClass.getInstance().upload(file)).start();
         Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
                 "Finished uploading \"" + title + "\" to the database."));
 
-        try{stmt.executeUpdate(varSQL);}
+        try{
+            stmt.executeUpdate(varSQL);
+            stmt.executeUpdate(intoOwned);
+        }
         catch(SQLException e){return Error.DATABASE_ERROR;}
 
         return Error.NO_ERROR;
