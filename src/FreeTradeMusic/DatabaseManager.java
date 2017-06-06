@@ -124,18 +124,22 @@ public class DatabaseManager
     {
         ObservableList<Song> songs = FXCollections.observableArrayList();
 
-        varSQL = "SELECT Title,Artist,Album,Genre,Year,Duration "
+        varSQL = "SELECT Title,Artist,Album,Genre,Year,Duration,FileName "
                 + "FROM Music";
+        Song temp;
+        String fn;
         try{
             ResultSet rs = stmt.executeQuery(varSQL);
             while (rs.next()) {
-                songs.add(new Song(rs.getString(1),
+                temp = new Song(rs.getString(1),
                         rs.getString(2),
                         rs.getString(3),
                         rs.getString(4),
                         rs.getInt(5),
                         rs.getInt(6),
-                        null));
+                        null);
+                temp.setFileName(rs.getString(7));
+                songs.add(temp);
             }
         }catch(SQLException e){}
         return songs;
@@ -248,6 +252,6 @@ public class DatabaseManager
         String currentDirectory = System.getProperty("user.dir");
         Platform.runLater(() -> FreeTradeMusic.mainWindowController.setStatus("STATUS",
                 "Downloading \"" + song.getTitle() + "\" to the database."));
-        new Thread(() -> AmazonClass.getInstance().download(currentDirectory , song.getTitle() + ".mp3", song)).start();
+        new Thread(() -> AmazonClass.getInstance().download(currentDirectory , song.getFileName(), song)).start();
     }
 }
