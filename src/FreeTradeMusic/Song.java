@@ -12,6 +12,7 @@ public class Song
     private int durationInSeconds;
     private final SimpleStringProperty duration;
     private String url;
+    private String fileName;
 
     public Song(String title, String artist, String album, String genre,
                 int year, int duration, String url)
@@ -107,4 +108,8 @@ public class Song
     {
         return url;
     }
+
+    public void setFileName(String fn) { this.fileName = fn; }
+
+    public String getFileName() { return fileName; }
 }
