@@ -550,8 +550,8 @@ public class MainWindowController
         artistUsernameTextField.setVisible(enable);
         artistLocationTextField.setVisible(enable);
         artistDescriptionTextArea.setVisible(enable);
-        followButton.setVisible(!enable);
-        seeMusicButton.setVisible(!enable);
+        //followButton.setVisible(!enable);
+        //seeMusicButton.setVisible(!enable);
         artistUsernameTextField.setText(FreeTradeMusic.user.getUsername());
         artistLocationTextField.setText(FreeTradeMusic.user.getLocation());
         artistDescriptionTextArea.setText(FreeTradeMusic.user.getDescription());
