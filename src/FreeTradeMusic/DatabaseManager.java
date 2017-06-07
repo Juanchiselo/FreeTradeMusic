@@ -236,7 +236,7 @@ public class DatabaseManager
                 description + "' " + "WHERE Users.user = '" + FreeTradeMusic.user.getUsername() + "'";
         try { stmt.executeUpdate(varSQL);
         }
-        catch(SQLException e) { System.out.println("Wrong");/*(return Error.DATABASE_ERROR;*/ }
+        catch(SQLException e) { System.out.println("UpdateProfileWrong");/*(return Error.DATABASE_ERROR;*/ }
         return Error.NO_ERROR;
     }
 
