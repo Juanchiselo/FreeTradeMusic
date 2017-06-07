@@ -83,7 +83,23 @@
                                  <children>
                                     <Label onMousePressed="#onGoToMusicLibrary" styleClass="labelMenuButton" text="Music Library" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Label onMousePressed="#onGoToSubmitSong" styleClass="labelMenuButton" text="Submit Music" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                    <Label onMousePressed="#onGoToWallet" styleClass="labelMenuButton" text="Wallet" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                                    <GridPane GridPane.columnIndex="2">
+                                      <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label styleClass="labelMenuButton" text="Wallet" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                                          <Label styleClass="labelMenuButton" text="0.0" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                                             <GridPane.margin>
+                                                <Insets right="20.0" />
+                                             </GridPane.margin>
+                                          </Label>
+                                       </children>
+                                    </GridPane>
                                  </children>
                               </GridPane>
                               <TabPane fx:id="homeTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
@@ -222,7 +238,6 @@
                                           </GridPane>
                                        </content>
                                     </Tab>
-                                    <Tab fx:id="walletTab" closable="false" text="Wallet" />
                                  </tabs>
                               </TabPane>
                            </children>

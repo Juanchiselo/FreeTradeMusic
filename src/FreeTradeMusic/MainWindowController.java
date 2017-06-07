@@ -333,11 +333,6 @@ public class MainWindowController
         mainWindowTabPane.getSelectionModel().select(profileTab);
     }
 
-    public void onGoToWallet()
-    {
-        homeTabPane.getSelectionModel().select(walletTab);
-    }
-
     public void onGoToMusicLibrary()
     {
         homeTabPane.getSelectionModel().select(musicLibraryTab);
