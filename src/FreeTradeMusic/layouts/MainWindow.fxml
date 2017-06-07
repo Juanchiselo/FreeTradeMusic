@@ -357,8 +357,6 @@
                                   <RowConstraints percentHeight="100.0" />
                                 </rowConstraints>
                                  <children>
-                                    <Button fx:id="followButton" mnemonicParsing="false" text="Favorite" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                                    <Button fx:id="seeMusicButton" mnemonicParsing="false" text="See Music" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                     <Button fx:id="updateProfileButton" mnemonicParsing="false" onAction="#onUpdateProfile" text="Update Profile" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                                  </children>
                               </GridPane>
