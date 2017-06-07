@@ -233,10 +233,11 @@ public class DatabaseManager
     public Error updateProfile(String username, String location, String description)
     {
         varSQL = "UPDATE Users SET user = '" + username + "'," + "location = '" + location + "',description = '" +
-                description + "' " + "WHERE Users.user = '" + FreeTradeMusic.user.getUsername() + "'";
-        try { stmt.executeUpdate(varSQL);
-        }
-        catch(SQLException e) { System.out.println("UpdateProfileWrong");/*(return Error.DATABASE_ERROR;*/ }
+                description + "' " + "WHERE user = '" + FreeTradeMusic.user.getUsername() + "'";
+
+        try { stmt.executeUpdate(varSQL); }
+        catch(SQLException e) { System.out.println("UpdateProfileWrong");return Error.DATABASE_ERROR; }
+
         return Error.NO_ERROR;
     }
 
